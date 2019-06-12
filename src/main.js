@@ -1,6 +1,8 @@
-var roleHarvester = require('role_harvester');
-var roleUpgrader = require('role_upgrader');
-var roleBuilder = require('role_builder');
+
+
+require('setup_prototype_creep');
+require('setup_prototype_room');
+require('setup_prototype_source');
 
 module.exports.loop = function () {
 
@@ -16,19 +18,6 @@ module.exports.loop = function () {
     var closestHostile = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
     if(closestHostile) {
       tower.attack(closestHostile);
-    }
-  }
-
-  for(var name in Game.creeps) {
-    var creep = Game.creeps[name];
-    if(creep.memory.role == 'harvester') {
-      roleHarvester.run(creep);
-    }
-    if(creep.memory.role == 'upgrader') {
-      roleUpgrader.run(creep);
-    }
-    if(creep.memory.role == 'builder') {
-      roleBuilder.run(creep);
     }
   }
 }
