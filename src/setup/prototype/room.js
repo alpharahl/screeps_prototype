@@ -13,12 +13,48 @@ Object.defineProperty(Room.prototype, 'sources', {
   configurable: true
 })
 
+Object.defineProperty(Room.prototype, 'nextCreepName', {
+  get: function(){
+    if (!this.memory.creepName){
+      this.memory.creepName = 0;
+    }
+    this.memory.creepName ++;
+    return this.name + '-' + this.memory.creepName;
+  }
+})
+
+Object.defineProperty(Room.prototype, 'spawns', {
+  get: function(){
+    if (!this._spawns){
+      this._spawns = this.find(FIND_MY_SPAWNS)
+    }
+    return this._spawns;
+  },
+
+  enumerable: false,
+  configurable: true
+})
+
+Room.prototype.bestSpawner = function(){
+  if (this._bestSpawner === undefined){
+    if (this.spawns.length > 0){
+      if (!this.spawns[0].spawning){
+        this._bestSpawner = this.spawns[0];
+      }
+    }
+    if (!this._bestSpawner){
+      this._bestSpawner = false;
+    }
+  }
+  return this._bestSpawner;
+}
+
 Object.defineProperty(Room.prototype, 'miners', {
   get: function(){
     if (!this._miners){
       this._miners = {}
-      for (const id of this.sources){
-        this._miners[id] = null;
+      for (const source of this.sources){
+        this._miners[source.id] = null;
       }
       for (const creep of this.creeps){
         if (creep.type === 'miner'){
@@ -31,6 +67,13 @@ Object.defineProperty(Room.prototype, 'miners', {
   enumerable: false,
   configurable:true
 })
+
+Room.prototype.ownedByMe = function(){
+  if (this.controller && this.controller.owner && this.controller.owner.username === 'alpha-rahl'){
+    return true;
+  }
+  return false;
+}
 
 Object.defineProperty(Room.prototype, 'creeps', {
   get: function(){

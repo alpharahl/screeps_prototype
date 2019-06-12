@@ -3,7 +3,7 @@ Object.defineProperty(Source.prototype, 'miningSpot',{
     if (!this._miningSpot){
       if (!this.memory.miningSpot){
         const spot = this.pos.findPathTo(this.room.baseLocation)[0]
-        this.memory.miningSpot = [spot.x, spot.y]
+        this.memory.miningSpot = spot;
       }
       this._miningSpot = this.memory.miningSpot
     }
