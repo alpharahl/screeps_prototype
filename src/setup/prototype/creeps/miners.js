@@ -23,6 +23,7 @@ Creep.prototype.depositMiningBox = function(){
   if (this.energy > 0){
     if (this.miningContainer){
       console.log('depositing')
+      //TODO fix this method, as it's not operating correctly, this.miningContainer should be truthy
       this.transfer(this.miningContainer, RESOURCE_ENERGY)
     } else {
       if (this.miningContainerSite){
