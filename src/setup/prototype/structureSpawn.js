@@ -1,10 +1,6 @@
 StructureSpawn.prototype.spawnMiner = function(sourceId){
   // first need to set room to know spawner is not available
-  var name = this.name + '-' + this.room.nextCreepName;
-  var energy = this.room.energyAvailable;
-  if (energy < 300){
-    return;
-  }
+  var name = this.room.nextCreepName;
   var ideal = [MOVE, CARRY, WORK, WORK, MOVE, WORK, WORK, MOVE, WORK, WORK]
   var body = this.finalizeBody(ideal);
   var creepOpts = {
@@ -16,6 +12,21 @@ StructureSpawn.prototype.spawnMiner = function(sourceId){
   if (this.spawnCreep(body, name, creepOpts) === OK){
     this.room._bestSpawner = false;
     console.log("Spawning miner for", sourceId, 'from', this.name)
+  }
+}
+
+StructureSpawn.prototype.spawnUpgrader = function(){
+  var name = this.room.nextCreepName;
+  var ideal = [MOVE, CARRY, WORK, WORK, MOVE, CARRY, WORK, WORK, MOVE, CARRY, WORK, WORK]
+  var body = this.finalizeBody(ideal);
+  var creepOpts = {
+    memory: {
+      type: 'upgrader'
+    }
+  }
+  if (this.spawnCreep(body, name, creepOpts) === OK){
+    this.room._bestSpawner = false;
+    console.log("Spawning Upgrader for", room.name)
   }
 }
 

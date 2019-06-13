@@ -1,6 +1,6 @@
 var miner = {
   run(creep){
-    creep.moveToMine();
+    creep.mine();
   }
 }
 

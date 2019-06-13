@@ -37,7 +37,7 @@ Object.defineProperty(Room.prototype, 'spawns', {
 
 Room.prototype.bestSpawner = function(){
   if (this._bestSpawner === undefined){
-    if (this.spawns.length > 0){
+    if (this.spawns.length > 0 && this.energyAvailable >= 300){
       if (!this.spawns[0].spawning){
         this._bestSpawner = this.spawns[0];
       }
@@ -66,6 +66,22 @@ Object.defineProperty(Room.prototype, 'miners', {
   },
   enumerable: false,
   configurable:true
+})
+
+Object.defineProperty(Room.prototype, 'upgraders', {
+  get: function(){
+    if (!this._upgraders){
+      this._upgraders = [];
+      for (const creep of this.creeps){
+        if (creep.type === 'upgrader'){
+          this._upgraders.push(creep.id)
+        }
+      }
+    }
+    return this._upgraders;
+  },
+  enumerable: false,
+  configurable: true
 })
 
 Room.prototype.ownedByMe = function(){
