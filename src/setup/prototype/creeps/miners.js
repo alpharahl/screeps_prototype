@@ -25,7 +25,6 @@ Creep.prototype.depositMiningBox = function(){
       console.log('depositing')
       this.transfer(this.miningContainer, RESOURCE_ENERGY)
     } else {
-      this.speak('🛠')
       if (this.miningContainerSite){
         this.build(this.miningContainerSite)
       } else {
