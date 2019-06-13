@@ -26,7 +26,7 @@ StructureSpawn.prototype.spawnUpgrader = function(){
   }
   if (this.spawnCreep(body, name, creepOpts) === OK){
     this.room._bestSpawner = false;
-    console.log("Spawning Upgrader for", room.name)
+    console.log("Spawning Upgrader for", this.room.name)
   }
 }
 

@@ -29,8 +29,8 @@ Creep.prototype.getEnergy = function(){
                    i.energy() > 0
   })
   if (containers[0]){
-    if (this.withdraw(containers[0], RESOURCE_ENERGY) === ERR_NOT_IN_RANGE){
-      this.moveTo(containers[0])
+    if (this.withdraw(containers[containers.length - 1], RESOURCE_ENERGY) === ERR_NOT_IN_RANGE){
+      this.moveTo(containers[containers.length - 1])
     }
   }
 }
