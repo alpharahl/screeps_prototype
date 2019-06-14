@@ -102,6 +102,15 @@ Object.defineProperty(Room.prototype, 'creeps', {
   configurable:true
 })
 
+Object.defineProperty(Room.prototype, 'constructionSites', {
+  get (){
+    if (!this._sites){
+      this._sites = this.find(FIND_CONSTRUCTION_SITES)
+    }
+    return this._sites;
+  }
+})
+
 Object.defineProperty(Room.prototype, 'baseLocation', {
   get: function(){
     if (!this._baseLocation){

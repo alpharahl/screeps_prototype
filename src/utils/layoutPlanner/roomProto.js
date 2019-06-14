@@ -46,5 +46,6 @@ Object.defineProperty(Room.prototype, 'extensionSites', {
         }
       })
     }
+    return this._extensionSites;
   }
 })
