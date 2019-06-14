@@ -14,7 +14,22 @@ var planner = {
     return new RoomPosition(room.baseRoot.x + x, room.baseRoot.y + y, room.name)
   },
 
-  placeExtensions(){},
+  placeExtensions(){
+    if ((room.extensions.length + room.extensionSites.length) < CONTROLLER_STRUCTURES['extension'][room.controller.level]){
+      for (const rowInd in LAYOUT){
+        const row = LAYOUT[rowInd]
+        for(const pInd in row){
+          const placement = row[pInd]
+          if(placement === 'e'){
+            const pos = planner.getPos(parseInt(pInd), parseInt(rowInd), room)
+            new RoomVisual(room.name).circle(pos, {
+              fill: 'yellow'
+            })
+          }
+        }
+      }
+    }
+  },
 
   placeTowers(room){
     if ((room.towers.length + room.towerSites.length) < CONTROLLER_STRUCTURES['tower'][room.controller.level]){
