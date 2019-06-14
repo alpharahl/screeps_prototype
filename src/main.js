@@ -1,6 +1,8 @@
+require('setup_constants_buildingLayout')
 require('setup_setup');
 var spawners = require('spawners_spawners');
 var roleManager = require('role_roleManager');
+var utils = require('utils_utils');
 
 function exportStats() {
   // Reset stats object
@@ -65,11 +67,14 @@ module.exports.loop = function () {
     }
   }
 
+  utils.run();
   spawners.run();
   roleManager.run();
   if (Memory.stats === undefined){
     Memory.stats = {}
+
   }
+
 
   exportStats();
 }

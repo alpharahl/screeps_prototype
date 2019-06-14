@@ -113,3 +113,12 @@ Object.defineProperty(Room.prototype, 'baseLocation', {
   enumerable: false,
   configurable:true
 })
+
+Object.defineProperty(Room.prototype, 'baseRoot', {
+  get: function(){
+    if (!this._rootLocation){
+      this._rootLocation = new RoomPosition(this.baseLocation.x - 5, this.baseLocation.y - 6, this.name)
+    }
+    return this._rootLocation;
+  }
+})
