@@ -10,11 +10,24 @@ var planner = {
     }
   },
 
+  getPos(x, y, room){
+    return new RoomPosition(room.baseRoot.x + x, room.baseRoot.y + y, room.name)
+  },
+
   placeExtensions(){},
 
   placeTowers(room){
     if ((room.towers.length + room.towerSites.length) < CONTROLLER_STRUCTURES['tower'][room.controller.level]){
-      console.log('need to place a tower');
+      for (const rowInd in LAYOUT){
+        const row = LAYOUT[rowInd];
+        for (const pInd in row){
+          const placement = row[pInd]
+          if (placement === 't'){
+            const pos = planner.getPos(parseInt(pInd), parseInt(rowInd), room)
+            new RoomVisual(room.name).circle(pos.x, pos.y)
+          }
+        }
+      }
 
     }
   }
