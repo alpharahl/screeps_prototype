@@ -45,6 +45,24 @@ StructureSpawn.prototype.spawnBuilder = function(){
   }
 }
 
+StructureSpawn.prototype.spawnHauler = function(){
+  var name = this.room.nextCreepName;
+  var ideal = [MOVE, CARRY];
+  for (const i = 0; i < 10; i++){
+    ideal = ideal.concat(ideal)
+  }
+  var body = this.finalizeBody(ideal);
+  var creepOpts = {
+    memory: {
+      type: 'hauler'
+    }
+  }
+  if (this.spawnCreep(body, name, creepOpts) === OK){
+    this.room._bestSpawner = false;
+    console.log("Spawning Hauler for", this.room.name);
+  }
+}
+
 StructureSpawn.prototype.finalizeBody = function(bodyParts){
   var energy = this.room.energyAvailable;
   var final = [];

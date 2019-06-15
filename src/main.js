@@ -63,12 +63,17 @@ module.exports.loop = function () {
     for (const tower of towers){
 
       if(tower) {
-        // var closestDamagedStructure = tower.pos.findClosestByRange(FIND_STRUCTURES, {
-        //   filter: (structure) => structure.hits < structure.hitsMax
-        // });
-        // if(closestDamagedStructure) {
-        //   tower.repair(closestDamagedStructure);
-        // }
+        var closestDamagedStructure = tower.pos.findClosestByRange(FIND_STRUCTURES, {
+          filter: (i) => {
+            return i.hits < i.hitsMax &&
+              i.structureType !== STRUCTURE_WALL &&
+              i.structureType !== STRUCTURE_RAMPART
+          }
+
+        });
+        if(closestDamagedStructure) {
+          tower.repair(closestDamagedStructure);
+        }
 
         var closestHostile = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
         if(closestHostile) {

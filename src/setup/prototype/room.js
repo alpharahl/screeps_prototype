@@ -100,6 +100,23 @@ Object.defineProperty(Room.prototype, 'builders', {
   configurable: true
 })
 
+Object.defineProperty(Room.prototype, 'haulers', {
+  get: function(){
+    if (!this._haulers){
+      this._haulers = [];
+      for (const creep of this.creeps){
+        if (creep.type === 'hauler'){
+          this._haulers.push(creep.id)
+        }
+      }
+    }
+    return this._haulers;
+  },
+  enumerable: false,
+  configurable: true
+
+})
+
 Room.prototype.ownedByMe = function(){
   if (this.controller && this.controller.owner && this.controller.owner.username === 'alpha-rahl'){
     return true;
