@@ -16,8 +16,8 @@ function exportStats() {
   };
 
   Memory.stats.time = Game.time;
-  for (let roomName in Game.rooms) {
-    let room = Game.rooms[roomName];
+  for (const roomName in Game.rooms) {
+    const room = Game.rooms[roomName];
     let isMyRoom = (room.controller ? room.controller.my : false);
     if (isMyRoom) {
       let roomStats = Memory.stats.rooms[roomName] = {};

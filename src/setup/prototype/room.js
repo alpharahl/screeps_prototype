@@ -35,19 +35,24 @@ Object.defineProperty(Room.prototype, 'spawns', {
   configurable: true
 })
 
-Room.prototype.bestSpawner = function(){
-  if (this._bestSpawner === undefined){
-    if (this.spawns.length > 0 && this.energyAvailable >= 300){
-      for (const spawn of this.spawns){
-        if (!spawn.spawning){
-          this._bestSpawner = this.spawns[0];
-          return this._bestSpawner;
+
+Object.defineProperty(Room.prototype, 'bestSpawner', {
+  get (){
+    if (this._bestSpawner === undefined){
+      if (this.spawns.length > 0 && this.energyAvailable >= 300){
+        for (const spawn of this.spawns){
+          if (!spawn.spawning){
+            this._bestSpawner = this.spawns[0];
+            return this._bestSpawner;
+          }
         }
       }
     }
-  }
-  return this._bestSpawner;
-}
+    return this._bestSpawner;
+  },
+  enumerable: false,
+  configurable: true
+})
 
 Object.defineProperty(Room.prototype, 'miners', {
   get: function(){
@@ -100,18 +105,21 @@ Object.defineProperty(Room.prototype, 'builders', {
   configurable: true
 })
 
-
-Room.prototype.haulers = function(){
-  if (!this._haulers){
-    this._haulers = [];
-    for (const creep of this.creeps){
-      if (creep.type === 'hauler'){
-        this._haulers.push(creep.id)
+Object.defineProperty(Room.prototype, 'haulers', {
+  get: function(){
+    if (!this._haulers){
+      this._haulers = [];
+      for (const creep of this.creeps){
+        if (creep.type === 'hauler'){
+          this._haulers.push(creep.id)
+        }
       }
     }
-  }
-  return this._haulers;
-}
+    return this._haulers;
+  },
+  enumerable: false,
+  configurable: true
+})
 
 Room.prototype.ownedByMe = function(){
   if (this.controller && this.controller.owner && this.controller.owner.username === 'alpha-rahl'){

@@ -5,6 +5,9 @@ var haulerSpawner = require('spawners_hauler');
 
 var spawners = {
   run(){
+    if (Game.time % 50 != 0){
+      return;
+    }
     for (const roomName in Game.rooms){
       const room = Game.rooms[roomName];
       minerSpawner.run(room);
