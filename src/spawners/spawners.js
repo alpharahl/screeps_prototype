@@ -5,10 +5,13 @@ var haulerSpawner = require('spawners_hauler');
 
 var spawners = {
   run(){
-    minerSpawner.run();
-    upgraderSpawner.run();
-    haulerSpawner.run();
-    builderSpawner.run();
+    for (const roomName in Game.rooms){
+      const room = Game.rooms[roomName];
+      minerSpawner.run(room);
+      haulerSpawner.run(room);
+      upgraderSpawner.run(room);
+      builderSpawner.run(room);
+    }
   }
 }
 

@@ -1,13 +1,17 @@
 Creep.prototype.haul = function() {
   this.isWorking();
   if (this.working) {
-    if (this.fillTowers()){
-      return;
-    }
+    this.speak('🚚')
     if (this.fillExtensions()){
       return;
     }
     if (this.fillSpawns()){
+      return;
+    }
+    if (this.fillTowers()){
+      return;
+    }
+    if (this.fillUpgrader()){
       return;
     }
   }else {
@@ -24,6 +28,26 @@ Creep.prototype.fillTowers = function(){
     }
   }
   return false;
+}
+
+Creep.prototype.fillUpgrader = function(){
+  if (this.room.upgraders.length > 0)
+  var upgrader;
+  for (const u of this.room.upgraders){
+    var up = Game.getObjectById(u)
+    if (!upgrader){
+      upgrader = up;
+    } else {
+      if (up.energy < upgrader.energy){
+        upgrader = up;
+      }
+    }
+  }
+  var res = this.transfer(upgrader, RESOURCE_ENERGY);
+
+  if ( res === ERR_NOT_IN_RANGE){
+    this.moveTo(upgrader);
+  }
 }
 
 Creep.prototype.fillExtensions = function(){

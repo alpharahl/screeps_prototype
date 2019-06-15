@@ -10,6 +10,7 @@ StructureSpawn.prototype.spawnMiner = function(sourceId){
     }
   }
   if (this.spawnCreep(body, name, creepOpts) === OK){
+    console.log("miner spawned ok")
     this.room._bestSpawner = false;
     console.log("Spawning miner for", sourceId, 'from', this.name)
   }
@@ -17,7 +18,7 @@ StructureSpawn.prototype.spawnMiner = function(sourceId){
 
 StructureSpawn.prototype.spawnUpgrader = function(){
   var name = this.room.nextCreepName;
-  var ideal = [MOVE, CARRY, WORK, WORK, MOVE, CARRY, WORK, WORK, MOVE, CARRY, WORK, WORK]
+  var ideal = [MOVE, CARRY, WORK, MOVE, CARRY, WORK, MOVE, CARRY, WORK, MOVE, CARRY, WORK]
   var body = this.finalizeBody(ideal);
   var creepOpts = {
     memory: {
@@ -32,7 +33,7 @@ StructureSpawn.prototype.spawnUpgrader = function(){
 
 StructureSpawn.prototype.spawnBuilder = function(){
   var name = this.room.nextCreepName;
-  var ideal = [MOVE, CARRY, WORK, WORK, MOVE, MOVE, WORK, WORK, CARRY, MOVE]
+  var ideal = [MOVE, CARRY, WORK, MOVE, CARRY, WORK, MOVE, CARRY, WORK, MOVE, CARRY, WORK]
   var body = this.finalizeBody(ideal);
   var creepOpts = {
     memory: {
@@ -48,7 +49,7 @@ StructureSpawn.prototype.spawnBuilder = function(){
 StructureSpawn.prototype.spawnHauler = function(){
   var name = this.room.nextCreepName;
   var ideal = [MOVE, CARRY];
-  for (const i = 0; i < 10; i++){
+  for (var i = 0; i < 10; i++){
     ideal = ideal.concat(ideal)
   }
   var body = this.finalizeBody(ideal);

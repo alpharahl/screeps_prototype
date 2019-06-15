@@ -38,12 +38,12 @@ Object.defineProperty(Room.prototype, 'spawns', {
 Room.prototype.bestSpawner = function(){
   if (this._bestSpawner === undefined){
     if (this.spawns.length > 0 && this.energyAvailable >= 300){
-      if (!this.spawns[0].spawning){
-        this._bestSpawner = this.spawns[0];
+      for (const spawn of this.spawns){
+        if (!spawn.spawning){
+          this._bestSpawner = this.spawns[0];
+          return this._bestSpawner;
+        }
       }
-    }
-    if (!this._bestSpawner){
-      this._bestSpawner = false;
     }
   }
   return this._bestSpawner;
@@ -100,22 +100,18 @@ Object.defineProperty(Room.prototype, 'builders', {
   configurable: true
 })
 
-Object.defineProperty(Room.prototype, 'haulers', {
-  get: function(){
-    if (!this._haulers){
-      this._haulers = [];
-      for (const creep of this.creeps){
-        if (creep.type === 'hauler'){
-          this._haulers.push(creep.id)
-        }
+
+Room.prototype.haulers = function(){
+  if (!this._haulers){
+    this._haulers = [];
+    for (const creep of this.creeps){
+      if (creep.type === 'hauler'){
+        this._haulers.push(creep.id)
       }
     }
-    return this._haulers;
-  },
-  enumerable: false,
-  configurable: true
-
-})
+  }
+  return this._haulers;
+}
 
 Room.prototype.ownedByMe = function(){
   if (this.controller && this.controller.owner && this.controller.owner.username === 'alpha-rahl'){

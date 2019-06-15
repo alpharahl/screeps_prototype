@@ -5,7 +5,9 @@ var spawners = require('spawners_spawners');
 var roleManager = require('role_roleManager');
 var utils = require('utils_utils');
 
+// Collect room stats
 function exportStats() {
+
   // Reset stats object
   Memory.stats = {
     gcl: {},
@@ -14,8 +16,6 @@ function exportStats() {
   };
 
   Memory.stats.time = Game.time;
-
-  // Collect room stats
   for (let roomName in Game.rooms) {
     let room = Game.rooms[roomName];
     let isMyRoom = (room.controller ? room.controller.my : false);
@@ -38,21 +38,24 @@ function exportStats() {
       }
       roomStats.creeps.miners = miners;
       roomStats.creeps.upgraders = room.upgraders.length;
+      roomStats.creeps.haulers = room.haulers.length;
+      roomStats.creeps.builders = room.builders.length;
     }
-  }
 
+  }
   // Collect GCL stats
   Memory.stats.gcl.progress      = Game.gcl.progress;
   Memory.stats.gcl.progressTotal = Game.gcl.progressTotal;
-  Memory.stats.gcl.level         = Game.gcl.level;
 
+  Memory.stats.gcl.level         = Game.gcl.level;
   // Collect CPU stats
   Memory.stats.cpu.bucket        = Game.cpu.bucket;
   Memory.stats.cpu.limit         = Game.cpu.limit;
   Memory.stats.cpu.used          = Game.cpu.getUsed();
-}
 
+}
 module.exports.loop = function () {
+
   for (const roomName in Game.rooms){
     const room =Game.rooms[roomName];
     var towers = room.find(FIND_MY_STRUCTURES, {
@@ -71,7 +74,7 @@ module.exports.loop = function () {
           }
 
         });
-        if(closestDamagedStructure) {
+        if(closestDamagedStructure && tower.energy > 400) {
           tower.repair(closestDamagedStructure);
         }
 
@@ -82,6 +85,7 @@ module.exports.loop = function () {
       }
     }
   }
+
 
   utils.run();
   spawners.run();

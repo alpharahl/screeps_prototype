@@ -1,10 +1,8 @@
 var haulerSpawner = {
-  run(){
-    for (const room of ROOMS){
-      if (room.haulers.length < 2){
-        if (room.bestSpawner()){
-          room.bestSpawner().spawnHauler();
-        }
+  run(room){
+    if (room.haulers().length < 2){
+      if (room.bestSpawner()){
+        room.bestSpawner().spawnHauler();
       }
     }
   }
