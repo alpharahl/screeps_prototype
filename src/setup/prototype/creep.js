@@ -1,5 +1,6 @@
 require('setup_prototype_creeps_miners');
 require('setup_prototype_creeps_upgraders');
+require('setup_prototype_creeps_builder');
 
 Creep.prototype.speak = function(words){
   this.say(words || this.type);

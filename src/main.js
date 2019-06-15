@@ -1,5 +1,6 @@
-require('setup_constants_buildingLayout')
 require('setup_setup');
+require('setup_constants_buildingLayout')
+require('setup_constants_utils');
 var spawners = require('spawners_spawners');
 var roleManager = require('role_roleManager');
 var utils = require('utils_utils');

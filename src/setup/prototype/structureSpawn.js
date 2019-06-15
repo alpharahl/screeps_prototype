@@ -30,6 +30,21 @@ StructureSpawn.prototype.spawnUpgrader = function(){
   }
 }
 
+StructureSpawn.prototype.spawnBuilder = function(){
+  var name = this.room.nextCreepName;
+  var ideal = [MOVE, CARRY, WORK, WORK, MOVE, MOVE, WORK, WORK, CARRY, MOVE]
+  var body = this.finalizeBody(ideal);
+  var creepOpts = {
+    memory: {
+      type: 'builder'
+    }
+  }
+  if (this.spawnCreep(body, name, creepOpts) === OK){
+    this.room._bestSpawner = false;
+    console.log("Spawning Builder for", this.room.name)
+  }
+}
+
 StructureSpawn.prototype.finalizeBody = function(bodyParts){
   var energy = this.room.energyAvailable;
   var final = [];

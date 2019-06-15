@@ -1,5 +1,6 @@
 var miner = require('role_miner');
 var upgrader = require('role_upgrader');
+var builder = require('role_builder');
 
 var roleManager = {
   run(){
@@ -9,6 +10,8 @@ var roleManager = {
         miner.run(creep);
       } else if (creep.type === 'upgrader'){
         upgrader.run(creep);
+      } else if (creep.type === 'builder'){
+        builder.run(creep);
       }
     }
   }

@@ -84,6 +84,22 @@ Object.defineProperty(Room.prototype, 'upgraders', {
   configurable: true
 })
 
+Object.defineProperty(Room.prototype, 'builders', {
+  get: function(){
+    if (!this._builders){
+      this._builders = [];
+      for (const creep of this.creeps){
+        if (creep.type === 'builder'){
+          this._builders.push(creep.id)
+        }
+      }
+    }
+    return this._builders;
+  },
+  enumerable: false,
+  configurable: true
+})
+
 Room.prototype.ownedByMe = function(){
   if (this.controller && this.controller.owner && this.controller.owner.username === 'alpha-rahl'){
     return true;
