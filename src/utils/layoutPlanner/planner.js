@@ -27,6 +27,7 @@ var planner = {
             new RoomVisual(room.name).circle(pos, {
               fill: 'yellow'
             })
+            pos.createConstructionSite(STRUCTURE_EXTENSION);
           }
         }
       }

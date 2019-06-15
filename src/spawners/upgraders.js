@@ -9,7 +9,7 @@ var upgraderSpawner = {
     }
 
     for (const room of rooms){
-      if (room.upgraders.length < 3){
+      if (room.upgraders.length < 2){
         if (room.bestSpawner()){
           room.bestSpawner().spawnUpgrader();
         }
