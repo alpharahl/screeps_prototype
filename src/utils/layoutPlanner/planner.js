@@ -8,6 +8,7 @@ var planner = {
         planner.placeTowers(room);
         planner.placeExtensions(room);
         planner.placeRoads(room);
+        planner.placeStorage(room);
       }
     }
   },
@@ -34,6 +35,22 @@ var planner = {
     }
   },
 
+  placeStorage(room){
+    if (room.storage || CONTROLLER_STRUCTURES['storage'][room.controller.level] === 0){
+      return;
+    }
+    for (const rowInd in LAYOUT){
+      const row = LAYOUT[rowInd]
+      for (const pInd in row){
+        const placement = row[pInd];
+        if (placement === 'b'){
+          const pos = planner.getPos(parseInt(pInd), parseInt(rowInd), room);
+          pos.createConstructionSite(STRUCTURE_STORAGE);
+        }
+      }
+    }
+  },
+
   placeTowers(room){
     if ((room.towers.length + room.towerSites.length) < CONTROLLER_STRUCTURES['tower'][room.controller.level]){
       for (const rowInd in LAYOUT){
@@ -52,15 +69,20 @@ var planner = {
   },
 
   placeRoads(room){
-    for (const rowInd in LAYOUT){
-      const row = LAYOUT[rowInd];
-      for (const pInd in row){
-        const placement = row[pInd];
-        if (placement === 'r'){
-          const pos = planner.getPos(parseInt(pInd), parseInt(rowInd), room);
-          new RoomVisual(room.name).circle(pos, {
-            fill: 'red'
-          })
+    if (room.constructionSites.length === 0){
+      for (const rowInd in LAYOUT){
+        const row = LAYOUT[rowInd];
+        for (const pInd in row){
+          const placement = row[pInd];
+          if (placement === 'r'){
+            const pos = planner.getPos(parseInt(pInd), parseInt(rowInd), room);
+            new RoomVisual(room.name).circle(pos, {
+              fill: 'red'
+            })
+            if (pos.createConstructionSite(STRUCTURE_ROAD) === OK){
+              return;
+            }
+          }
         }
       }
     }

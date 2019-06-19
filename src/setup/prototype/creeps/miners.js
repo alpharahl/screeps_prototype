@@ -12,7 +12,11 @@ Creep.prototype.mine = function(){
   if (this.pos.x === position.x && this.pos.y === position.y){
     this.speak('⛏');
     this.harvest(this.miningSource);
-    this.depositMiningBox();
+    var dropped = this.pos.lookFor(LOOK_ENERGY);
+    if (dropped){
+      this.pickup(dropped);
+    }
+    this.drop(RESOURCE_ENERGY);
   } else {
     this.moveTo(position.x, position.y)
     this.speak('✈️');
@@ -22,7 +26,6 @@ Creep.prototype.mine = function(){
 Creep.prototype.depositMiningBox = function(){
   if (this.energy > 0){
     if (this.miningContainer){
-      console.log('depositing')
       //TODO fix this method, as it's not operating correctly, this.miningContainer should be truthy
       this.transfer(this.miningContainer, RESOURCE_ENERGY)
     } else {

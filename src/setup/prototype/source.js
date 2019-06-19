@@ -11,7 +11,21 @@ Object.defineProperty(Source.prototype, 'miningSpot',{
   },
   enumerable: false,
   configurable: true
+})
 
+Object.defineProperty(Source.prototype, 'container', {
+  get: function(){
+    if (!this._container){
+      var spot = new RoomPosition(this.miningSpot.x, this.miningSpot.y, this.room.name);
+      var cs = spot.lookFor(LOOK_STRUCTURES);
+      for (const s of cs){
+        if (s.structureType === STRUCTURE_CONTAINER){
+          this._container = s;
+        }
+      }
+    }
+    return this._container;
+  }
 })
 
 Object.defineProperty(Source.prototype, 'memory', {

@@ -11,13 +11,32 @@ Creep.prototype.haul = function() {
     if (this.fillTowers()){
       return;
     }
+    if (this.fillBuilders()){
+      return;
+    }
     if (this.fillUpgrader()){
       return;
     }
   }else {
     this.speak('☀️')
-    this.getEnergy();
+    this.getEnergyForHaul();
   }
+}
+
+Creep.prototype.getEnergyForHaul = function(){
+  var container = this.pos.findClosestByPath(FIND_STRUCTURES, {
+    filter: (i) => {
+      return i.structureType === STRUCTURE_CONTAINER &&
+        i.store[RESOURCE_ENERGY] > 100 &&
+        i.id !== this.room.memory.controllerStorage;
+    }
+  })
+  if (container){
+    if (this.withdraw(container, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE){
+      this.moveTo(container)
+    }
+  }
+
 }
 
 Creep.prototype.fillTowers = function(){
@@ -31,22 +50,62 @@ Creep.prototype.fillTowers = function(){
 }
 
 Creep.prototype.fillUpgrader = function(){
-  if (this.room.upgraders.length > 0)
-  var upgrader;
-  for (const u of this.room.upgraders){
-    var up = Game.getObjectById(u)
-    if (!upgrader){
-      upgrader = up;
-    } else {
-      if (up.energy < upgrader.energy){
-        upgrader = up;
+  if (this.room.memory.controllerStorage && this.room.memory.controllerStorage !== 'building'){
+    var container = Game.getObjectById(this.room.memory.controllerStorage);
+    if (this.transfer(container, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE){
+      this.moveTo(container);
+      return true;
+    }
+  } else {
+
+    if (this.room.upgraders.length > 0){
+
+      var upgrader;
+      for (const u of this.room.upgraders){
+        var up = Game.getObjectById(u)
+        if (!upgrader){
+          upgrader = up;
+        } else {
+          if (up.energy < upgrader.energy){
+            upgrader = up;
+          }
+        }
+      }
+      var res = this.transfer(upgrader, RESOURCE_ENERGY);
+
+      if ( res === ERR_NOT_IN_RANGE){
+        this.moveTo(upgrader);
       }
     }
   }
-  var res = this.transfer(upgrader, RESOURCE_ENERGY);
+}
 
-  if ( res === ERR_NOT_IN_RANGE){
-    this.moveTo(upgrader);
+Creep.prototype.fillBuilders = function(){
+  if (this.room.builders.length > 0){
+    var builder;
+    var builders = this.pos.findClosestByPath(FIND_MY_CREEPS, {
+      filter: (i) => {
+        return i.memory.type === 'builder'
+      }
+    })
+    if (builders.length > 0){
+      builder = builders[0]
+      for (const b of builders){
+        if (b.energy < builder.energy){
+          builder = b;
+        }
+      }
+    }
+    if (!builder){
+      return false;
+    }
+    var res = this.transfer(builder, RESOURCE_ENERGY)
+    if (res === ERR_NOT_IN_RANGE){
+      this.moveTo(builder);
+      return true;
+    } else if (res === OK){
+      return true;
+    }
   }
 }
 

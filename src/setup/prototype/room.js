@@ -121,6 +121,33 @@ Object.defineProperty(Room.prototype, 'haulers', {
   configurable: true
 })
 
+Object.defineProperty(Room.prototype, 'queens', {
+  get: function(){
+    if (!this._queens){
+      this._queens = this.find(FIND_MY_CREEPS, {
+        filter: (i) => {
+          return i.memory.type === 'queen'
+        }
+      })
+    }
+    return this._queens
+  }
+})
+
+Object.defineProperty(Room.prototype, 'sourceStorage', {
+  get: function(){
+    if (!this._sourceStorage){
+      this._sourceStorage = [];
+      for (const source of this.sources){
+        if (source.container){
+          this._sourceStorage.push(source.container)
+        }
+      }
+    }
+    return this._sourceStorage;
+  }
+})
+
 Room.prototype.ownedByMe = function(){
   if (this.controller && this.controller.owner && this.controller.owner.username === 'alpha-rahl'){
     return true;
