@@ -50,7 +50,7 @@ StructureSpawn.prototype.spawnHauler = function(){
   var name = this.room.nextCreepName;
   var ideal = [MOVE, CARRY];
   for (var i = 0; i < 10; i++){
-    ideal = ideal.concat(ideal)
+    ideal = ideal.concat([MOVE, CARRY])
   }
   var body = this.finalizeBody(ideal);
   var creepOpts = {

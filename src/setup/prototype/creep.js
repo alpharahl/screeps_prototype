@@ -26,15 +26,21 @@ Object.defineProperty(Creep.prototype, 'energy', {
 });
 
 Creep.prototype.getEnergy = function(){
-  var container = this.pos.findClosestByPath(FIND_STRUCTURES, {
-    filter: (i) => {
-      return i.structureType === STRUCTURE_CONTAINER &&
-        i.store[RESOURCE_ENERGY] > 50
+  if (this.room.storage && this.room.storage.energy > 0){
+    if (this.withdraw(this.room.storage, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE){
+      this.moveTo(this.room.storage);
     }
-  })
-  if (container){
-    if (this.withdraw(container, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE){
-      this.moveTo(container)
+  } else {
+    var container = this.pos.findClosestByPath(FIND_STRUCTURES, {
+      filter: (i) => {
+        return i.structureType === STRUCTURE_CONTAINER &&
+          i.store[RESOURCE_ENERGY] > 50
+      }
+    })
+    if (container){
+      if (this.withdraw(container, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE){
+        this.moveTo(container)
+      }
     }
   }
 }

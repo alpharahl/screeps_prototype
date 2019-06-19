@@ -1,17 +1,20 @@
 Creep.prototype.haul = function() {
   this.isWorking();
   if (this.working) {
-    this.speak('🚚')
     if (this.fillExtensions()){
       return;
     }
     if (this.fillSpawns()){
       return;
     }
+    this.speak('🚚')
     if (this.fillTowers()){
       return;
     }
     if (this.fillBuilders()){
+      return;
+    }
+    if (this.fillStorage()){
       return;
     }
     if (this.fillUpgrader()){
@@ -27,7 +30,7 @@ Creep.prototype.getEnergyForHaul = function(){
   var container = this.pos.findClosestByPath(FIND_STRUCTURES, {
     filter: (i) => {
       return i.structureType === STRUCTURE_CONTAINER &&
-        i.store[RESOURCE_ENERGY] > 100 &&
+        i.store[RESOURCE_ENERGY] > this.carryCapacity * 2/3 &&
         i.id !== this.room.memory.controllerStorage;
     }
   })
@@ -39,11 +42,27 @@ Creep.prototype.getEnergyForHaul = function(){
 
 }
 
-Creep.prototype.fillTowers = function(){
-  if (this.room.towers && this.room.towers[0].energy < 750) {
-    if (this.transfer(this.room.towers[0], RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
-      this.moveTo(this.room.towers[0])
+Creep.prototype.fillStorage = function(){
+  if (this.room.storage){
+    if (this.room.storage.energy < 500000){
+      if (this.transfer(this.room.storage, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE){
+        this.moveTo(this.room.storage)
+      }
       return true;
+    }
+  }
+  return false;
+}
+
+Creep.prototype.fillTowers = function(){
+  if (this.room.towers){
+    for (const tower of this.room.towers){
+      if (tower.energy < 750){
+        if (this.transfer(tower, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE){
+          this.moveTo(tower);
+        }
+        return true;
+      }
     }
   }
   return false;
@@ -135,18 +154,19 @@ Creep.prototype.fillSpawns = function(){
   if (this.room.spawns.length > 0){
     for (const spawn of this.room.spawns){
       if (spawn.energy < spawn.energyCapacity){
-        this.memory.spawn = spawn.id;
+        this.speak("in spawn")
+        this._spawn = spawn.id;
         break;
       }
     }
 
-    if (this.memory.spawn){
-      var spawn = Game.getObjectById(this.memory.spawn)
+    if (this._spawn){
+      var spawn = Game.getObjectById(this._spawn)
         if (spawn.energy < spawn.energyCapacity){
         if (this.transfer(spawn, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE){
           this.moveTo(spawn);
         } else {
-          this.memory.spawn = null;
+          this._spawn = null;
         }
 
       }

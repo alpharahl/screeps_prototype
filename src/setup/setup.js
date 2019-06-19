@@ -5,6 +5,7 @@ require('setup_prototype_game');
 require('setup_prototype_structureSpawn')
 require('setup_prototype_structureContainer')
 require('setup_prototype_controller')
+require('setup_prototype_storage');
 
 for (var name in Memory.creeps){
   if (!Game.creeps[name]){
