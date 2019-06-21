@@ -1,6 +1,10 @@
 var haulerSpawner = {
   run(room){
-    if (room.haulers.length < 2){
+    var haulerCount = 2;
+    if (room.storage.energy > 0){
+      haulerCount = 2;
+    }
+    if (room.haulers.length < haulerCount){
       if (room.bestSpawner){
         room.bestSpawner.spawnHauler();
       }

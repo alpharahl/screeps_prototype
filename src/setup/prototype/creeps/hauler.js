@@ -1,24 +1,30 @@
 Creep.prototype.haul = function() {
   this.isWorking();
   if (this.working) {
-    if (this.fillExtensions()){
-      return;
-    }
-    if (this.fillSpawns()){
-      return;
-    }
-    this.speak('🚚')
-    if (this.fillTowers()){
-      return;
-    }
-    if (this.fillBuilders()){
-      return;
-    }
-    if (this.fillStorage()){
-      return;
-    }
-    if (this.fillUpgrader()){
-      return;
+    if (this.room.queens.length === 0){
+      if (this.room.energyAvailable < this.room.energyCapacityAvailable){
+        if (this.fillExtensions()){
+          return;
+        }
+        if (this.fillSpawns()){
+          return;
+        }
+      }
+      this.speak('🚚')
+      if (this.fillTowers()){
+        return;
+      }
+      if (this.fillBuilders()){
+        return;
+      }
+      if (this.fillStorage()){
+        return;
+      }
+      if (this.fillUpgrader()){
+        return;
+      }
+    } else {
+      this.fillStorage();
     }
   }else {
     this.speak('☀️')
@@ -27,6 +33,18 @@ Creep.prototype.haul = function() {
 }
 
 Creep.prototype.getEnergyForHaul = function(){
+  var dropped = this.pos.findClosestByPath(FIND_DROPPED_RESOURCES, {
+    filter: (i) => {
+      return i.resourceType === RESOURCE_ENERGY &&
+        i.amount > 150
+    }
+  })
+  if (dropped){
+    if (this.pickup(dropped) === ERR_NOT_IN_RANGE){
+      this.moveTo(dropped)
+    }
+    return true;
+  }
   var container = this.pos.findClosestByPath(FIND_STRUCTURES, {
     filter: (i) => {
       return i.structureType === STRUCTURE_CONTAINER &&
@@ -129,22 +147,15 @@ Creep.prototype.fillBuilders = function(){
 }
 
 Creep.prototype.fillExtensions = function(){
-  if (this.room.extensions.length > 0){
-    for (const extension of this.room.extensions){
-      if (extension.energy < extension.energyCapacity){
-        this.memory.extension = extension.id;
-        break;
-      }
+  var ext = this.pos.findClosestByPath(FIND_MY_STRUCTURES, {
+    filter: (i) => {
+      return i.structureType == STRUCTURE_EXTENSION &&
+        i.energy < i.energyCapacity
     }
-  }
-  if (this.memory.extension){
-    var extension = Game.getObjectById(this.memory.extension);
-    if (extension.energy < extension.energyCapacity){
-      if (this.transfer(extension, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE){
-        this.moveTo(extension);
-      }
-    } else {
-      this.memory.extension = null;
+  });
+  if (ext){
+    if (this.transfer(ext, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE){
+      this.moveTo(ext);
     }
     return true;
   }
@@ -154,7 +165,6 @@ Creep.prototype.fillSpawns = function(){
   if (this.room.spawns.length > 0){
     for (const spawn of this.room.spawns){
       if (spawn.energy < spawn.energyCapacity){
-        this.speak("in spawn")
         this._spawn = spawn.id;
         break;
       }

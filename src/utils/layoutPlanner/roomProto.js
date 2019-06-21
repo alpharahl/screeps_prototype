@@ -50,3 +50,16 @@ Object.defineProperty(Room.prototype, 'extensionSites', {
   }
 })
 
+Object.defineProperty(Room.prototype, 'leafs', {
+  get(){
+    if (!this._leafs){
+      if (this.controller.level <= 5){
+        this._leafs = 2;
+      } else {
+        this._leafs = 4;
+      }
+    }
+    return this._leafs;
+  }
+})
+

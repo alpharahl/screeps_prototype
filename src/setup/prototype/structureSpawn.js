@@ -18,7 +18,11 @@ StructureSpawn.prototype.spawnMiner = function(sourceId){
 
 StructureSpawn.prototype.spawnUpgrader = function(){
   var name = this.room.nextCreepName;
-  var ideal = [MOVE, CARRY, WORK, MOVE, CARRY, WORK, MOVE, CARRY, WORK, MOVE, CARRY, WORK]
+  var ideal = [];
+  const idealTimes = 6;
+  for (var i = 0; i < idealTimes; i++){
+    ideal = ideal.concat([MOVE, WORK, CARRY]);
+  }
   var body = this.finalizeBody(ideal);
   var creepOpts = {
     memory: {
@@ -61,6 +65,21 @@ StructureSpawn.prototype.spawnHauler = function(){
   if (this.spawnCreep(body, name, creepOpts) === OK){
     this.room._bestSpawner = false;
     console.log("Spawning Hauler for", this.room.name);
+  }
+}
+
+StructureSpawn.prototype.spawnQueen = function(){
+  var name = this.room.nextCreepName;
+  var ideal = [MOVE, CARRY, CARRY, MOVE, CARRY, CARRY, MOVE, CARRY, CARRY]
+  var body = this.finalizeBody(ideal);
+  var creepOpts = {
+    memory: {
+      type: 'queen'
+    }
+  }
+  if (this.spawnCreep(body, name, creepOpts) === OK){
+    this.room._bestSpawner = false;
+    console.log("Spawning Queen fro", this.room.name);
   }
 }
 

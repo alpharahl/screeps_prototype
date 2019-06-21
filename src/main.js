@@ -40,6 +40,7 @@ function exportStats() {
       roomStats.creeps.upgraders = room.upgraders.length;
       roomStats.creeps.haulers = room.haulers.length;
       roomStats.creeps.builders = room.builders.length;
+      roomStats.creeps.queens = room.queens.length;
     }
 
   }

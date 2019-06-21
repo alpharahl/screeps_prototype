@@ -2,6 +2,7 @@ var miner = require('role_miner');
 var upgrader = require('role_upgrader');
 var builder = require('role_builder');
 var hauler = require('role_hauler');
+var queen = require('role_queen');
 
 getMethod = function(string, creep)
 {

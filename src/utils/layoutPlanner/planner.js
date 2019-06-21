@@ -69,6 +69,9 @@ var planner = {
   },
 
   placeRoads(room){
+    if (room.memory.bunkerRoads === "complete" && Game.time % 1000 !== 0){
+      return;
+    }
     if (room.constructionSites.length === 0){
       for (const rowInd in LAYOUT){
         const row = LAYOUT[rowInd];
@@ -85,6 +88,8 @@ var planner = {
           }
         }
       }
+      // if we get here, no need to build more roads
+      room.memory.bunkerRoads = "complete"
     }
   }
 };
