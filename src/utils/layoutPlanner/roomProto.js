@@ -63,3 +63,31 @@ Object.defineProperty(Room.prototype, 'leafs', {
   }
 })
 
+Object.defineProperty(Room.prototype, 'links', {
+  get(){
+    if (!this._links){
+      this._links = this.find(FIND_MY_STRUCTURES, {
+        filter: (i) => {
+          return i.structureType === STRUCTURE_LINK
+        }
+      })
+    }
+    return this._links;
+  }
+})
+
+Object.defineProperty(Room.prototype, 'linkSites', {
+  get(){
+    if (!this._linkSites){
+      this._linkSites = this.find(FIND_CONSTRUCTION_SITES, {
+        filter: (i) => {
+          return i.structureType === STRUCTURE_LINK
+        }
+      })
+    }
+    return this._linkSites;
+  }
+})
+
+
+

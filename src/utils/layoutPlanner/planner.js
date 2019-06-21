@@ -9,6 +9,7 @@ var planner = {
         planner.placeExtensions(room);
         planner.placeRoads(room);
         planner.placeStorage(room);
+        planner.placeLinks(room);
       }
     }
   },
@@ -90,6 +91,50 @@ var planner = {
       }
       // if we get here, no need to build more roads
       room.memory.bunkerRoads = "complete"
+    }
+  },
+
+  placeLinks(room){
+    if ((room.links.length + room.linkSites.length) < CONTROLLER_STRUCTURES['link'][room.controller.level] ){
+      if ((room.links.length + room.linkSites.length)  === 0){
+        for (const rowInd in LAYOUT) {
+          const row = LAYOUT[rowInd];
+          for (const pInd in row) {
+            const placement = row[pInd];
+            if (placement === 'l') {
+              const pos = planner.getPos(parseInt(pInd), parseInt(rowInd), room);
+              new RoomVisual(room.name).circle(pos, {
+                fill: 'red'
+              })
+              if (pos.createConstructionSite(STRUCTURE_LINK) === OK){
+                return;
+              }
+            }
+          }
+        }
+      } else {
+        var sources = room.sources.sort((a, b) => {
+          if (a.distToBase > b.distToBase){
+            return -1;
+          } else if (a.distToBase < b.distToBase){
+            return 1;
+          }
+          return 0;
+        })
+        for (const source of sources){
+          if (!source.link){
+            // const pos = new RoomPosition(source.linkPos.x, source.linkPos.y, room.name)
+            new RoomVisual(room.name).circle(source.linkSpot, {
+              fill: 'red'
+            })
+            var pos = new RoomPosition(source.linkSpot.x, source.linkSpot.y, room.name)
+            if (pos.createConstructionSite(STRUCTURE_LINK) === OK){
+              return;
+            }
+          }
+        }
+
+      }
     }
   }
 };

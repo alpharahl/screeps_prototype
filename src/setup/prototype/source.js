@@ -13,18 +13,68 @@ Object.defineProperty(Source.prototype, 'miningSpot',{
   configurable: true
 })
 
+Object.defineProperty(Source.prototype, 'linkSpot', {
+  get: function(){
+    if (!this._linkSpot){
+      if (!this.memory.linkSpot){
+        const spot = new RoomPosition(this.miningSpot.x, this.miningSpot.y, this.room.name).findPathTo(this.room.baseLocation, {
+          ignoreCreeps: true
+        })[0]
+        this.memory.linkSpot = spot;
+      }
+      this._linkSpot = this.memory.linkSpot;
+    }
+    return this._linkSpot
+  }
+})
+
+Object.defineProperty(Source.prototype, 'link', {
+  get (){
+    if (!this._link){
+      if (!this.memory.link || !Game.getObjectById(this.memory.link)){
+        var spot = new RoomPosition(this.linkSpot.x, this.linkSpot.y, this.room.name);
+        var cs = spot.lookFor(LOOK_STRUCTURES);
+        for (const s of cs){
+          if (s.structureType === STRUCTURE_LINK){
+            this.memory.link = s.id;
+          }
+        }
+      }
+      this._link = Game.getObjectById(this.memory.link);
+    }
+    return this._link;
+  }
+})
+
 Object.defineProperty(Source.prototype, 'container', {
   get: function(){
     if (!this._container){
-      var spot = new RoomPosition(this.miningSpot.x, this.miningSpot.y, this.room.name);
-      var cs = spot.lookFor(LOOK_STRUCTURES);
-      for (const s of cs){
-        if (s.structureType === STRUCTURE_CONTAINER){
-          this._container = s;
+      if (!this.memory.container || !Game.getObjectById(this.memory.container)){
+        var spot = new RoomPosition(this.miningSpot.x, this.miningSpot.y, this.room.name);
+        var cs = spot.lookFor(LOOK_STRUCTURES);
+        for (const s of cs){
+          if (s.structureType === STRUCTURE_CONTAINER){
+            this.memory.container = s.id;
+          }
         }
       }
+      this._container = Game.getObjectById(this.memory.container);
     }
     return this._container;
+  }
+})
+
+Object.defineProperty(Source.prototype, 'distToBase', {
+  get: function(){
+    if (!this._distToBase){
+      if (!this.memory.distToBase){
+        this.memory.distToBase = this.pos.findPathTo(this.room.baseLocation, {
+          ignoreCreeps: true
+        }).length
+      }
+      this._distToBase = this.memory.distToBase;
+    }
+    return this._distToBase;
   }
 })
 
