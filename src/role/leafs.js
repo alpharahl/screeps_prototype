@@ -3,7 +3,6 @@ module.exports = {
     for (const leaf of room.leafs){
       const queen = leaf.queen;
       if (queen) {
-        // this.backup(queen)
         queen.isWorking();
         if (queen.working) {
           if (this.fillExtensions(leaf, queen)) {
@@ -84,9 +83,5 @@ module.exports = {
         queen.moveTo(leaf.storage);
       }
     }
-  },
-
-  backup(queen){
-    queen.queen();
   }
 }
