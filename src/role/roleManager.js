@@ -2,7 +2,8 @@ var miner = require('role_miner');
 var upgrader = require('role_upgrader');
 var builder = require('role_builder');
 var hauler = require('role_hauler');
-var queen = require('role_queen');
+var leafs = require('role_leafs');
+var links = require('role_links');
 
 getMethod = function(string, creep)
 {
@@ -13,7 +14,16 @@ var roleManager = {
   run(){
     for (const name in Game.creeps){
       const creep = Game.creeps[name]
-      getMethod(creep.type, creep);
+      if (creep.type !== 'queen'){
+        getMethod(creep.type, creep);
+      }
+    }
+    for (const name in Game.rooms) {
+      const room = Game.rooms[name];
+      if (room.ownedByMe()) {
+        leafs.run(room);
+        links.run(room);
+      }
     }
   }
 }

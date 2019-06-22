@@ -12,11 +12,12 @@ Creep.prototype.mine = function(){
   if (this.pos.x === position.x && this.pos.y === position.y){
     this.speak('⛏');
     this.harvest(this.miningSource);
-    var dropped = this.pos.lookFor(LOOK_ENERGY);
-    if (dropped){
-      this.pickup(dropped);
+
+    if (this.miningSource.link){
+      this.transfer(this.miningSource.link, RESOURCE_ENERGY);
+    } else {
+      this.drop(RESOURCE_ENERGY);
     }
-    this.drop(RESOURCE_ENERGY);
   } else {
     this.moveTo(position.x, position.y)
     this.speak('✈️');

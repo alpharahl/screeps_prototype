@@ -8,9 +8,15 @@ var spawners = {
   run(){
     for (const roomName in Game.rooms){
       const room = Game.rooms[roomName];
-      if (Game.time % 25 != 0 && room.energyAvailable !== room.energyCapacityAvailable){
-        return;
+      if (Game.time % 25 != 0){
+        if (room.energyAvailable < 300){
+          return;
+        }
+        if (room.energyAvailable <= room.energyCapacityAvailable * 2/3){
+          return;
+        }
       }
+
       minerSpawner.run(room);
       haulerSpawner.run(room);
       queenSpawner.run(room);

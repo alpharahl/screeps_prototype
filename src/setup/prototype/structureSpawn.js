@@ -68,18 +68,20 @@ StructureSpawn.prototype.spawnHauler = function(){
   }
 }
 
-StructureSpawn.prototype.spawnQueen = function(){
+StructureSpawn.prototype.spawnQueen = function(leaf){
   var name = this.room.nextCreepName;
   var ideal = [MOVE, CARRY, CARRY, MOVE, CARRY, CARRY, MOVE, CARRY, CARRY]
   var body = this.finalizeBody(ideal);
   var creepOpts = {
     memory: {
-      type: 'queen'
+      type: 'queen',
+      leaf: leaf.id
     }
   }
   if (this.spawnCreep(body, name, creepOpts) === OK){
     this.room._bestSpawner = false;
     console.log("Spawning Queen fro", this.room.name);
+    leaf.memory.queen = name;
   }
 }
 

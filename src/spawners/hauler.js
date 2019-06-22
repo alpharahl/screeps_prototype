@@ -4,6 +4,11 @@ var haulerSpawner = {
     if (room.storage.energy > 0){
       haulerCount = 2;
     }
+    for (const source of room.sources){
+      if (source.link){
+        haulerCount--;
+      }
+    }
     if (room.haulers.length < haulerCount){
       if (room.bestSpawner){
         room.bestSpawner.spawnHauler();

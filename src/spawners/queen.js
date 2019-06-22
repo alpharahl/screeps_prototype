@@ -1,11 +1,13 @@
 var queenSpawner = {
   run(room){
-    if (room.queens.length < room.leafs){
-      if (room.bestSpawner){
-        room.bestSpawner.spawnQueen();
+    for (const leaf of room.leafs){
+      if (!leaf.queen){
+        if (room.bestSpawner){
+
+          room.bestSpawner.spawnQueen(leaf);
+        }
       }
     }
-
   }
 }
 
