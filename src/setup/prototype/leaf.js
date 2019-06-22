@@ -3,6 +3,13 @@ function Leaf(room, p1, id){
   this.storage = room.storage;
   this.startingPoint = p1;
   this.id = room.name + '-' + id;
+  if (Game.time % 100 === 0){
+    this.memory.ids = null;
+    this.memory.extensions = [];
+    this.memory.towers = [];
+    this.memory.spawns = [];
+    this.memory.links = [];
+  }
 }
 
 Object.defineProperty(Leaf.prototype, 'ids', {

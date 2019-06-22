@@ -4,6 +4,7 @@ var builder = require('role_builder');
 var hauler = require('role_hauler');
 var leafs = require('role_leafs');
 var links = require('role_links');
+var harasser = require('role_harasser');
 
 getMethod = function(string, creep)
 {

@@ -8,6 +8,9 @@ var spawners = {
   run(){
     for (const roomName in Game.rooms){
       const room = Game.rooms[roomName];
+      if (!room.ownedByMe()){
+        continue;
+      }
       if (Game.time % 25 != 0){
         if (room.energyAvailable < 300){
           return;

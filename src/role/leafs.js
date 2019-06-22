@@ -9,7 +9,9 @@ module.exports = {
           if (this.fillExtensions(leaf, queen)) {
             return;
           }
-          ;
+          if (this.fillSpawns(leaf, queen)){
+            return;
+          }
           if (this.fillTowers(leaf, queen)) {
             return;
           }
@@ -37,6 +39,16 @@ module.exports = {
     if (exts.length > 0){
       if (queen.transfer(exts[0], RESOURCE_ENERGY) === ERR_NOT_IN_RANGE){
         queen.moveTo(exts[0]);
+      }
+      return true;
+    }
+  },
+
+  fillSpawns(leaf, queen){
+    var spawns = leaf.spawns.filter(spawn => spawn.energy < spawn.energyCapacity)
+    if (spawns.length > 0){
+      if (queen.transfer(spawns[0], RESOURCE_ENERGY) === ERR_NOT_IN_RANGE){
+        queen.moveTo(spawns[0]);
       }
       return true;
     }
