@@ -119,6 +119,9 @@ Object.defineProperty(Leaf.prototype, 'spawns', {
       for (const id of this.memory.spawns){
         spawns.push(Game.getObjectById(id))
       }
+      if (this.id.includes('-3')){
+        spawns.push(this.room.spawns[0]);
+      }
       this._spawns = spawns;
     }
     return this._spawns;

@@ -1,6 +1,5 @@
 module.exports = {
   run(room){
-    room.queenAvoid;
     for (const leaf of room.leafs){
       const queen = leaf.queen;
       if (queen) {
@@ -15,6 +14,9 @@ module.exports = {
           }
           if (this.fillTowers(leaf, queen)) {
             continue;
+          }
+          if (leaf.id.includes('-4')){
+            queen.fillUpgrader();
           }
           if (leaf.links.length > 0 && leaf.links[0].energy > 0) {
             this.empty(leaf, queen);
