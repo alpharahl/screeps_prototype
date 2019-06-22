@@ -26,6 +26,22 @@ Object.defineProperty(Creep.prototype, 'energy', {
   }
 });
 
+Creep.prototype._moveTo = Creep.prototype.moveTo;
+Creep.prototype.moveTo = function(target){
+  if (this.memory.type === 'queen'){
+    let cMatrix = new PathFinder.CostMatrix;
+    for (const spot of this.room.queenAvoid){
+      cMatrix.set(spot.x, spot.y, 30);
+    }
+    this._moveTo(target, {
+      reusePath: 10,
+      costCallback: cMatrix
+    });
+  } else {
+    this._moveTo(target);
+  }
+}
+
 Creep.prototype.getEnergy = function(){
   if (this.room.storage && this.room.storage.energy > 0){
     if (this.withdraw(this.room.storage, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE){

@@ -1,5 +1,6 @@
 module.exports = {
   run(room){
+    room.queenAvoid;
     for (const leaf of room.leafs){
       const queen = leaf.queen;
       if (queen) {
@@ -7,13 +8,13 @@ module.exports = {
         queen.isWorking();
         if (queen.working) {
           if (this.fillExtensions(leaf, queen)) {
-            return;
+            continue;
           }
           if (this.fillSpawns(leaf, queen)){
-            return;
+            continue;
           }
           if (this.fillTowers(leaf, queen)) {
-            return;
+            continue;
           }
           if (leaf.links.length > 0 && leaf.links[0].energy > 0) {
             this.empty(leaf, queen);
@@ -24,7 +25,7 @@ module.exports = {
         } else {
           queen.speak("☀️");
           if (this.emptyLink(leaf, queen)) {
-            return;
+            continue;
           }
           if (queen.withdraw(queen.room.storage, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
             queen.moveTo(queen.room.storage);

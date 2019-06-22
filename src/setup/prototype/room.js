@@ -121,6 +121,33 @@ Object.defineProperty(Room.prototype, 'haulers', {
   configurable: true
 })
 
+Object.defineProperty(Room.prototype, 'queenAvoid', {
+  get(){
+    if (!this._queenAvoid) {
+      this.memory.queenAvoid = null;
+      if (!this.memory.queenAvoid){
+        this.memory.queenAvoid = [
+          { x: this.baseRoot.x + 4, y: this.baseRoot.y + 5},
+          { x: this.baseRoot.x + 3, y: this.baseRoot.y + 5},
+          { x: this.baseRoot.x + 5, y: this.baseRoot.y + 3},
+          { x: this.baseRoot.x + 5, y: this.baseRoot.y + 6},
+          { x: this.baseRoot.x + 5, y: this.baseRoot.y + 4},
+          { x: this.baseRoot.x + 5, y: this.baseRoot.y + 7},
+          { x: this.baseRoot.x + 6, y: this.baseRoot.y + 5},
+          { x: this.baseRoot.x + 7, y: this.baseRoot.y + 5},
+        ]
+      }
+      var positions = [];
+      for (const mem of this.memory.queenAvoid) {
+        positions.push(new RoomPosition(mem.x, mem.y, this.name))
+      }
+
+      this._queenAvoid = positions;
+    }
+    return this._queenAvoid;
+  }
+})
+
 Object.defineProperty(Room.prototype, 'queens', {
   get: function(){
     if (!this._queens){

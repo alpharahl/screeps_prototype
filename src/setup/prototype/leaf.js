@@ -5,10 +5,10 @@ function Leaf(room, p1, id){
   this.id = room.name + '-' + id;
   if (Game.time % 100 === 0){
     this.memory.ids = null;
-    this.memory.extensions = [];
-    this.memory.towers = [];
-    this.memory.spawns = [];
-    this.memory.links = [];
+    this.memory.extensions = null;
+    this.memory.towers = null;
+    this.memory.spawns = null;
+    this.memory.links = null;
   }
 }
 

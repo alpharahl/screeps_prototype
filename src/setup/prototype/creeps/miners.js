@@ -19,7 +19,7 @@ Creep.prototype.mine = function(){
       this.drop(RESOURCE_ENERGY);
     }
   } else {
-    this.moveTo(position.x, position.y)
+    this.moveTo(new RoomPosition(position.x, position.y, this.miningSource.room.name))
     this.speak('✈️');
   }
 };
