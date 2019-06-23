@@ -10,6 +10,10 @@ var planner = {
         planner.placeRoads(room);
         planner.placeStorage(room);
         planner.placeLinks(room);
+        planner.placeRamparts(room);
+        if (Game.time % 10000 === 0){
+          room.removeAllWalls();
+        }
       }
     }
   },
@@ -33,6 +37,40 @@ var planner = {
           }
         }
       }
+    }
+  },
+
+  placeRamparts(room){
+    if (!room.expandable){
+      return;
+    }
+    if (room.criticalWallsAndRamparts.length > 0){
+      return;
+    }
+    if (room.memory.ramparts !== 'complete' || Game.time % 100 === 0){
+      room.memory.ramparts = null;
+      for (const rowInd in LAYOUT){
+        const row = LAYOUT[rowInd];
+        for (const pInd in row){
+          const placement = row[pInd];
+          if (placement === 'n'){
+            continue;
+          }
+          const pos = planner.getPos(parseInt(pInd), parseInt(rowInd), room);
+          const structs = pos.lookFor(LOOK_STRUCTURES)
+          for (const s of structs){
+            if (s.structureType === STRUCTURE_RAMPART){
+              continue;
+            }
+          }
+          new RoomVisual(room.name).circle(pos.x, pos.y, {fill: 'green'})
+          if (pos.createConstructionSite(STRUCTURE_RAMPART) === OK){
+            return;
+          }
+        }
+      }
+      room.memory.ramparts = 'complete'
+
     }
   },
 

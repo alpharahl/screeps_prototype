@@ -8,12 +8,18 @@ Object.defineProperty(Creep.prototype, 'miningSource', {
 })
 
 Creep.prototype.mine = function(){
+  if (this.memory.remote){
+    this.moveToRoom(this.memory.remote);
+  }
   var position = this.miningSource.miningSpot;
   if (this.pos.x === position.x && this.pos.y === position.y){
     this.speak('⛏');
     this.harvest(this.miningSource);
 
     if (this.miningSource.link){
+      if (this.miningSource.container){
+        this.withdraw(this.miningSource.container, RESOURCE_ENERGY);
+      }
       this.transfer(this.miningSource.link, RESOURCE_ENERGY);
     } else {
       this.drop(RESOURCE_ENERGY);
@@ -23,21 +29,6 @@ Creep.prototype.mine = function(){
     this.speak('✈️');
   }
 };
-
-Creep.prototype.depositMiningBox = function(){
-  if (this.energy > 0){
-    if (this.miningContainer){
-      //TODO fix this method, as it's not operating correctly, this.miningContainer should be truthy
-      this.transfer(this.miningContainer, RESOURCE_ENERGY)
-    } else {
-      if (this.miningContainerSite){
-        this.build(this.miningContainerSite)
-      } else {
-        this.placeMiningContainer()
-      }
-    }
-  }
-}
 
 Object.defineProperty(Creep.prototype, 'miningContainer', {
   get: function(){

@@ -1,0 +1,6 @@
+global.WALL_HEALTH = 100000;
+global.WALL_CRITICAL = 10000;
+global.CONSIDER_SCOUTING_OLD = 5000;
+global.AVOID = [
+  'E38N10'
+]

@@ -1,6 +1,7 @@
 require('setup_setup');
 require('setup_constants_buildingLayout')
 require('setup_constants_utils');
+require('setup_constants_variables');
 var spawners = require('spawners_spawners');
 var roleManager = require('role_roleManager');
 var utils = require('utils_utils');
@@ -75,6 +76,15 @@ module.exports.loop = function () {
           }
 
         });
+        if (!closestDamagedStructure){
+          closestDamagedStructure = tower.pos.findClosestByRange(FIND_STRUCTURES, {
+            filter: (i) => {
+              return i.hits < WALL_HEALTH &&
+                (i.structureType === STRUCTURE_WALL ||
+                i.structureType === STRUCTURE_RAMPART)
+            }
+          })
+        }
         if(closestDamagedStructure && tower.energy > 400) {
           tower.repair(closestDamagedStructure);
         }

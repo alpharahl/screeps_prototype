@@ -202,6 +202,94 @@ Object.defineProperty(Room.prototype, 'constructionSites', {
   }
 })
 
+Object.defineProperty(Room.prototype, 'expandable', {
+  get (){
+    if (this.storage && this.storage.energy >= 50000){
+      if (this.constructionSites.length === 0){
+        return true;
+      }
+    }
+    return false;
+  }
+})
+
+Object.defineProperty(Room.prototype, 'scout', {
+  get(){
+    if (!this._scout){
+      if (this.memory.scout){
+        var scout = Game.creeps[this.memory.scout];
+        if (!scout){
+          this.memory.scout = null;
+        }
+        this._scout = scout;
+      }
+    }
+    return this._scout;
+  }
+})
+
+Object.defineProperty(Room.prototype, 'neighbors', {
+  get(){
+    if (!this._neighbors){
+      this._neighbors = Game.map.describeExits(this.name);
+    }
+    return this._neighbors;
+  }
+})
+
+Object.defineProperty(Room.prototype, 'scoutTarget', {
+  get(){
+    if (!this._scoutTarget){
+      if (!this.memory.scoutReports){
+        this.memory.scoutReports = {}
+        for (const direction in this.neighbors){
+          const name = this.neighbors[direction]
+          if (Game.rooms[name]){
+            continue;
+          }
+          this.memory.scoutReports[name] = {
+            lastSeen: 0
+          }
+        }
+      }
+      for (const name in this.memory.scoutReports){
+        if (this.memory.scoutReports[name].lastSeen < Game.time - CONSIDER_SCOUTING_OLD){
+          if (AVOID.includes(name)){
+            continue;
+          }
+          return name;
+        }
+      }
+    }
+  }
+})
+
+Object.defineProperty(Room.prototype, 'criticalWallsAndRamparts', {
+  get (){
+    if (!this._criticalWallsAndRamparts){
+      this._criticalWallsAndRamparts = this.find(FIND_STRUCTURES, {
+        filter: (i) => {
+          return (i.structureType === STRUCTURE_WALL ||
+            i.structureType === STRUCTURE_RAMPART) &&
+            i.hits < WALL_CRITICAL
+        }
+      })
+    }
+    return this._criticalWallsAndRamparts
+  }
+})
+
+Room.prototype.removeAllWalls = function(){
+  var walls = this.find(FIND_STRUCTURES, {
+    filter: (i) => {
+      return i.structureType === STRUCTURE_WALL
+    }
+  })
+  for (const wall of walls){
+    wall.destroy();
+  }
+}
+
 Object.defineProperty(Room.prototype, 'baseLocation', {
   get: function(){
     if (!this._baseLocation){

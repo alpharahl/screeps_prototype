@@ -42,6 +42,13 @@ Creep.prototype.moveTo = function(target){
   }
 }
 
+Creep.prototype.moveToRoom = function(roomName){
+  if (this.room.name === roomName){
+    return;
+  }
+  this.moveTo(new RoomPosition(25,25,roomName));
+}
+
 Creep.prototype.getEnergy = function(){
   if (this.room.storage && this.room.storage.energy > 0){
     if (this.withdraw(this.room.storage, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE){

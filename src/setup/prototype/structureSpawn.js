@@ -1,4 +1,4 @@
-StructureSpawn.prototype.spawnMiner = function(sourceId){
+StructureSpawn.prototype.spawnMiner = function(sourceId, roomName = this.room.name){
   // first need to set room to know spawner is not available
   var name = this.room.nextCreepName;
   var ideal = [MOVE, CARRY, WORK, WORK, MOVE, WORK, WORK, MOVE, WORK, WORK]
@@ -6,7 +6,8 @@ StructureSpawn.prototype.spawnMiner = function(sourceId){
   var creepOpts = {
     memory: {
       type: 'miner',
-      source: sourceId
+      source: sourceId,
+      remote: roomName
     }
   }
   if (this.spawnCreep(body, name, creepOpts) === OK){
@@ -32,6 +33,22 @@ StructureSpawn.prototype.spawnUpgrader = function(){
   if (this.spawnCreep(body, name, creepOpts) === OK){
     this.room._bestSpawner = false;
     console.log("Spawning Upgrader for", this.room.name)
+  }
+}
+
+StructureSpawn.prototype.spawnScout = function(){
+  var name = this.room.nextCreepName;
+  var body = [MOVE, MOVE];
+  var creepOpts = {
+    memory: {
+      type: 'scout',
+      home: this.room.name
+    }
+  }
+  if (this.spawnCreep(body, name, creepOpts) === OK){
+    this.room._bestSpawner = false;
+    this.room.memory.scout = name;
+    console.log("Spawning scout for", this.room.name);
   }
 }
 
