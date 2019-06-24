@@ -10,29 +10,35 @@ var spawners = {
   run(){
     for (const roomName in Game.rooms){
       const room = Game.rooms[roomName];
-      if (!room.ownedByMe()){
-        continue;
-      }
-      if (Game.time % 25 != 0){
-        if (room.energyAvailable < 300){
-          return;
+      if (room.ownedByMe()){
+        if (!this.roomChecks(room)){
+          continue;
         }
-        if (room.energyAvailable <= room.energyCapacityAvailable * 2/3){
-          return;
-        }
+        this.spawnLocal(room);
       }
-      if (room.spawns.length === 0){
-        return;
-      }
-
-      minerSpawner.run(room);
-      haulerSpawner.run(room);
-      queenSpawner.run(room);
-      upgraderSpawner.run(room);
-      builderSpawner.run(room);
-      scoutSpawner.run(room);
-      reserverSpawner.run(room);
     }
+  },
+
+  roomChecks(room){
+    if (Game.time % 25 != 0){
+      if (room.energyAvailable <300){
+        return false;
+      }
+      if (room.energyAvailable <= room.energyCapacityAvailable * 2/3){
+        return false;
+      }
+    }
+    return true;
+  },
+
+  spawnLocal(room){
+    minerSpawner.run(room);
+    haulerSpawner.run(room);
+    queenSpawner.run(room);
+    upgraderSpawner.run(room);
+    builderSpawner.run(room);
+    scoutSpawner.run(room);
+    reserverSpawner.run(room);
   }
 }
 

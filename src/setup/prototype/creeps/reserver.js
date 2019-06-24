@@ -15,7 +15,7 @@ Reserver.prototype.run = function(){
       this.creep.moveTo(this.controller);
       this.memory.ticksToTravel++;
     } else {
-      if (this.ticksToLive && this.creep.ticksToLive === this.memory.ticksToTravel * 2/3){
+      if (this.ticksToLive && this.creep.ticksToLive === this.memory.ticksToTravel){
         Game.rooms[this.memory.home].memory.reservers[this.room.name] = null;
       }
     }

@@ -9,6 +9,7 @@ module.exports = {
         if(creep){
           return;
         }
+        room.memory.reservers[roomName] = null;
       }
       if (room.bestSpawner){
         room.bestSpawner.spawnReserver(roomName)

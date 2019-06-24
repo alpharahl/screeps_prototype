@@ -26,10 +26,10 @@ StructureSpawn.prototype.spawnReserver = function(roomName){
       home: this.room.name
     }
   }
-  // if (this.spawnCreep(RESERVE_BODY, name, creepOpts) === OK){
-  //   console.log("Reserver spawned for", roomName);
-  //   this.room.memory.reservers[roomName] = name;
-  // }
+  if (this.spawnCreep(RESERVE_BODY, name, creepOpts) === OK){
+    console.log("Reserver spawned for", roomName);
+    this.room.memory.reservers[roomName] = name;
+  }
 },
 
 StructureSpawn.prototype.spawnUpgrader = function(){

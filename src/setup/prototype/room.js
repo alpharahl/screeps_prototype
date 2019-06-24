@@ -39,13 +39,17 @@ Object.defineProperty(Room.prototype, 'spawns', {
 Object.defineProperty(Room.prototype, 'bestSpawner', {
   get (){
     if (this._bestSpawner === undefined){
-      if (this.spawns.length > 0 && this.energyAvailable >= 300){
-        for (const spawn of this.spawns){
-          if (!spawn.spawning){
-            this._bestSpawner = this.spawns[0];
-            return this._bestSpawner;
+      if (this.spawns.length > 0){
+        if (this.spawns.length > 0 && this.energyAvailable >= 300){
+          for (const spawn of this.spawns){
+            if (!spawn.spawning){
+              this._bestSpawner = this.spawns[0];
+              return this._bestSpawner;
+            }
           }
         }
+      } else {
+        this._bestSpawner = Game.rooms[this.memory.home].bestSpawner;
       }
     }
     return this._bestSpawner;
@@ -177,6 +181,13 @@ Object.defineProperty(Room.prototype, 'sourceStorage', {
 
 Room.prototype.ownedByMe = function(){
   if (this.controller && this.controller.owner && this.controller.owner.username === 'alpha-rahl'){
+    return true;
+  }
+  return false;
+}
+
+Room.prototype.reservedByMe = function(){
+  if (this.controller && this.controller.reservation && this.controller.reservation.username === 'alpha-rahl'){
     return true;
   }
   return false;

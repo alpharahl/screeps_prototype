@@ -5,7 +5,7 @@ Object.defineProperty(StructureController.prototype, 'storage', {
         if (!this.room.memory.controllerStorage){
           var pos = this.pos.findPathTo(this.room.spawns[0])[1];
           var roomPos = new RoomPosition(pos.x, pos.y, this.room.name);
-          if (roomPosPos.createConstructionSite(STRUCTURE_CONTAINER) === OK){
+          if (roomPos.createConstructionSite(STRUCTURE_CONTAINER) === OK){
             this.room.memory.controllerStorage = 'building';
             this.room.memory.controllerStoragePos = roomPos;
           }
