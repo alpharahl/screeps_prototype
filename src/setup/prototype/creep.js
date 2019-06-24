@@ -6,7 +6,7 @@ require('setup_prototype_creeps_queen');
 require('setup_prototype_creeps_reserver');
 
 Creep.prototype.speak = function(words){
-  this.say(words || this.type);
+  this.say(words || this.type, true);
 }
 
 Object.defineProperty(Creep.prototype, 'type', {
@@ -45,9 +45,10 @@ Creep.prototype.moveTo = function(target){
 
 Creep.prototype.moveToRoom = function(roomName){
   if (this.room.name === roomName){
-    return;
+    return false;
   }
   this.moveTo(new RoomPosition(25,25,roomName));
+  return true;
 }
 
 Creep.prototype.getEnergy = function(){

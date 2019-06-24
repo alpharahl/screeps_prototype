@@ -13,6 +13,7 @@ Reserver.prototype.run = function(){
   if (this.controller){
     if (this.creep.reserveController(this.controller) === ERR_NOT_IN_RANGE){
       this.creep.moveTo(this.controller);
+      this.creep.speak('✈️');
       this.memory.ticksToTravel++;
     } else {
       if (this.ticksToLive && this.creep.ticksToLive === this.memory.ticksToTravel){
@@ -23,6 +24,7 @@ Reserver.prototype.run = function(){
   } else {
     // can't see the room yet, need to move to it
     this.creep.moveToRoom(this.roomName)
+    this.creep.speak('✈️');
     this.memory.ticksToTravel++;
   }
 }

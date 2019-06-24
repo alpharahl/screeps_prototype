@@ -193,10 +193,28 @@ Room.prototype.reservedByMe = function(){
   return false;
 }
 
+Object.defineProperty(Room.prototype, 'home', {
+  get(){
+    if (!this._home){
+      if (this.memory.home){
+        this._home = Game.rooms[this.memory.home]
+      }
+    }
+    return this._home;
+  }
+})
+
 Object.defineProperty(Room.prototype, 'creeps', {
   get: function(){
     if (!this._creeps){
       this._creeps = this.find(FIND_MY_CREEPS)
+      if (this.memory.home){
+        this._creeps = this._creeps.concat(this.home.find(FIND_MY_CREEPS, {
+          filter: (i) => {
+            return i.memory.remote === this.name;
+          }
+        }))
+      }
     }
     return this._creeps;
   },
@@ -322,8 +340,13 @@ Room.prototype.removeAllWalls = function(){
 Object.defineProperty(Room.prototype, 'baseLocation', {
   get: function(){
     if (!this._baseLocation){
-      if (this.find(FIND_MY_SPAWNS).length > 0)
-      this._baseLocation = this.find(FIND_MY_SPAWNS)[0].pos
+      if (this.memory.home){
+        this._baseLocation = Game.rooms[this.memory.home].baseLocation
+      } else {
+        if (this.find(FIND_MY_SPAWNS).length > 0) {
+          this._baseLocation = this.find(FIND_MY_SPAWNS)[0].pos
+        }
+      }
     }
     return this._baseLocation;
   },

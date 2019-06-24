@@ -1,5 +1,6 @@
 StructureSpawn.prototype.spawnMiner = function(sourceId, roomName = this.room.name){
   // first need to set room to know spawner is not available
+  var room = Game.rooms[roomName];
   var name = this.room.nextCreepName;
   var ideal = [MOVE, CARRY, WORK, WORK, MOVE, WORK, WORK, MOVE, WORK, WORK]
   var body = this.finalizeBody(ideal);
@@ -12,7 +13,10 @@ StructureSpawn.prototype.spawnMiner = function(sourceId, roomName = this.room.na
   }
   if (this.spawnCreep(body, name, creepOpts) === OK){
     console.log("miner spawned ok")
-    this.room._bestSpawner = false;
+    room._bestSpawner = false;
+    if (room.name !== this.room.name){
+      this.room._bestSpawner = false;
+    }
     console.log("Spawning miner for", sourceId, 'from', this.name)
   }
 };
@@ -82,21 +86,26 @@ StructureSpawn.prototype.spawnBuilder = function(){
   }
 }
 
-StructureSpawn.prototype.spawnHauler = function(){
+StructureSpawn.prototype.spawnHauler = function(roomName = this.room.name){
   var name = this.room.nextCreepName;
   var ideal = [MOVE, CARRY];
-  for (var i = 0; i < 10; i++){
-    ideal = ideal.concat([MOVE, CARRY])
-  }
-  var body = this.finalizeBody(ideal);
   var creepOpts = {
     memory: {
       type: 'hauler'
     }
   }
+  if (roomName != this.room.name){
+    creepOpts.memory.remote = roomName;
+    creepOpts.memory.home = this.room.name;
+    ideal = [MOVE, CARRY, WORK]
+  }
+  for (var i = 0; i < 10; i++){
+    ideal = ideal.concat([MOVE, CARRY])
+  }
+  var body = this.finalizeBody(ideal);
   if (this.spawnCreep(body, name, creepOpts) === OK){
     this.room._bestSpawner = false;
-    console.log("Spawning Hauler for", this.room.name);
+    console.log("Spawning Hauler for", roomName);
   }
 }
 

@@ -15,6 +15,8 @@ var spawners = {
           continue;
         }
         this.spawnLocal(room);
+      } else if (room.reservedByMe()){
+        this.spawnRemote(room);
       }
     }
   },
@@ -39,6 +41,11 @@ var spawners = {
     builderSpawner.run(room);
     scoutSpawner.run(room);
     reserverSpawner.run(room);
+  },
+
+  spawnRemote(room){
+    minerSpawner.remoteRun(room);
+    haulerSpawner.remoteRun(room);
   }
 }
 

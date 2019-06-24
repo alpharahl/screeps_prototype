@@ -1,8 +1,5 @@
 var haulerSpawner = {
   run(room){
-    if (!room.ownedByMe()){
-      return;
-    }
     var haulerCount = 2;
     if ( room.storage && room.storage.energy > 0){
       haulerCount = 2;
@@ -15,6 +12,15 @@ var haulerSpawner = {
     if (room.haulers.length < haulerCount){
       if (room.bestSpawner){
         room.bestSpawner.spawnHauler();
+      }
+    }
+  },
+
+  remoteRun(room){
+    var haulerCount = 2;
+    if (room.haulers.length < haulerCount){
+      if (room.bestSpawner){
+        room.bestSpawner.spawnHauler(roomName);
       }
     }
   }

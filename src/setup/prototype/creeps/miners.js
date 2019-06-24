@@ -19,6 +19,8 @@ Creep.prototype.mine = function(){
     if (this.miningSource.link){
       if (this.miningSource.container){
         this.withdraw(this.miningSource.container, RESOURCE_ENERGY);
+      } else {
+        this.placeMiningContainer()
       }
       this.transfer(this.miningSource.link, RESOURCE_ENERGY);
     } else {
