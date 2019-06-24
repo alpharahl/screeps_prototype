@@ -4,3 +4,10 @@ global.CONSIDER_SCOUTING_OLD = 5000;
 global.AVOID = [
   'E38N10'
 ]
+global.RESERVE_BODY = [
+  MOVE,
+  MOVE,
+  MOVE,
+  CLAIM,
+  CLAIM
+]

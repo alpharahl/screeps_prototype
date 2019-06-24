@@ -4,6 +4,7 @@ var builderSpawner = require('spawners_builder');
 var haulerSpawner = require('spawners_hauler');
 var queenSpawner = require('spawners_queen')
 var scoutSpawner = require('spawners_scout');
+var reserverSpawner = require('spawners_reserver');
 
 var spawners = {
   run(){
@@ -30,6 +31,7 @@ var spawners = {
       upgraderSpawner.run(room);
       builderSpawner.run(room);
       scoutSpawner.run(room);
+      reserverSpawner.run(room);
     }
   }
 }

@@ -3,6 +3,7 @@ require('setup_prototype_creeps_upgraders');
 require('setup_prototype_creeps_builder');
 require('setup_prototype_creeps_hauler');
 require('setup_prototype_creeps_queen');
+require('setup_prototype_creeps_reserver');
 
 Creep.prototype.speak = function(words){
   this.say(words || this.type);

@@ -15,7 +15,22 @@ StructureSpawn.prototype.spawnMiner = function(sourceId, roomName = this.room.na
     this.room._bestSpawner = false;
     console.log("Spawning miner for", sourceId, 'from', this.name)
   }
-}
+};
+
+StructureSpawn.prototype.spawnReserver = function(roomName){
+  var name = this.room.nextCreepName;
+  var creepOpts = {
+    memory: {
+      type: 'reserver',
+      remote: roomName,
+      home: this.room.name
+    }
+  }
+  // if (this.spawnCreep(RESERVE_BODY, name, creepOpts) === OK){
+  //   console.log("Reserver spawned for", roomName);
+  //   this.room.memory.reservers[roomName] = name;
+  // }
+},
 
 StructureSpawn.prototype.spawnUpgrader = function(){
   var name = this.room.nextCreepName;

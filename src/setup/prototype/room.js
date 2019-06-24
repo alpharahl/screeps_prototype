@@ -264,6 +264,24 @@ Object.defineProperty(Room.prototype, 'scoutTarget', {
   }
 })
 
+Object.defineProperty(Room.prototype, 'reserveRooms', {
+  get(){
+    if (!this._reserveRooms){
+      if (!this.memory.reserveRooms || Game.time % 750 === 0){
+        this.memory.reserveRooms = [];
+        for (const name in this.memory.scoutReports){
+          const report = this.memory.scoutReports[name];
+          if (report.reserve){
+            this.memory.reserveRooms.push(name);
+          }
+        }
+      }
+      this._reserveRooms = this.memory.reserveRooms;
+    }
+    return this._reserveRooms
+  }
+})
+
 Object.defineProperty(Room.prototype, 'criticalWallsAndRamparts', {
   get (){
     if (!this._criticalWallsAndRamparts){
