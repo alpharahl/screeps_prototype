@@ -30,7 +30,11 @@ Creep.prototype.mine = function(){
       if (this.miningContainerSite){
         this.build(this.miningContainerSite);
       } else {
-        this.drop(RESOURCE_ENERGY);
+        if (this.miningSource.container.hits < this.miningSource.container.hitsMax){
+          this.repair(this.miningSource.container);
+        } else {
+          this.drop(RESOURCE_ENERGY);
+        }
       }
     }
   } else {
