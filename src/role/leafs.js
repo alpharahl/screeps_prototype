@@ -16,9 +16,11 @@ module.exports = {
           }
           if (leaf.id.includes('-4')){
             queen.fillUpgrader();
+            return;
           }
           if (leaf.links.length > 0 && leaf.links[0].energy > 0) {
             this.empty(leaf, queen);
+            return;
           }
           if (queen.energy < queen.carryCapacity) {
             queen.working = false
