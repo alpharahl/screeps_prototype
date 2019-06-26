@@ -362,3 +362,14 @@ Object.defineProperty(Room.prototype, 'baseRoot', {
     return this._rootLocation;
   }
 })
+
+Object.defineProperty(Room.prototype, 'storageLocation', {
+  get(){
+    if (!this._storageLocation){
+      if (this.spawns.length > 0){
+        this._storageLocation = new RoomPosition(this.baseLocation.x, this.baseLocation.y - 1, this.name);
+      }
+    }
+    return this._storageLocation;
+  }
+})

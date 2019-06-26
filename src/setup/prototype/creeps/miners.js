@@ -9,22 +9,29 @@ Object.defineProperty(Creep.prototype, 'miningSource', {
 
 Creep.prototype.mine = function(){
   if (this.memory.remote){
-    this.moveToRoom(this.memory.remote);
+    if (this.moveToRoom(this.memory.remote)){
+      return;
+    }
+
   }
   var position = this.miningSource.miningSpot;
   if (this.pos.x === position.x && this.pos.y === position.y){
     this.speak('⛏');
     this.harvest(this.miningSource);
-
+    if (!this.miningSource.container){
+      this.placeMiningContainer();
+    }
     if (this.miningSource.link){
       if (this.miningSource.container){
         this.withdraw(this.miningSource.container, RESOURCE_ENERGY);
-      } else {
-        this.placeMiningContainer()
       }
       this.transfer(this.miningSource.link, RESOURCE_ENERGY);
     } else {
-      this.drop(RESOURCE_ENERGY);
+      if (this.miningContainerSite){
+        this.build(this.miningContainerSite);
+      } else {
+        this.drop(RESOURCE_ENERGY);
+      }
     }
   } else {
     this.moveTo(new RoomPosition(position.x, position.y, this.miningSource.room.name))

@@ -20,7 +20,7 @@ var haulerSpawner = {
     var haulerCount = 2;
     if (room.haulers.length < haulerCount){
       if (room.bestSpawner){
-        room.bestSpawner.spawnHauler(roomName);
+        room.bestSpawner.spawnHauler(room.name);
       }
     }
   }

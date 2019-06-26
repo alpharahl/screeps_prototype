@@ -19,6 +19,11 @@ Object.defineProperty(StructureController.prototype, 'storage', {
             var container = containers[0];
             this.room.memory.controllerStorage = container.id;
           }
+        } else {
+          this._storage = Game.getObjectById(this.room.memory.controllerStorage);
+          if (!this._storage){
+            this.room.memory.controllerStorage = null;
+          }
         }
       }
     }

@@ -11,8 +11,11 @@ module.exports = {
         }
         room.memory.reservers[roomName] = null;
       }
-      if (room.bestSpawner){
-        room.bestSpawner.spawnReserver(roomName)
+      var targetRoom = Game.rooms[roomName]
+      if (targetRoom && targetRoom.controller.reservation && targetRoom.controller.reservation.ticksToEnd < 1000){
+        if (room.bestSpawner){
+          room.bestSpawner.spawnReserver(roomName)
+        }
       }
     }
   }

@@ -97,19 +97,14 @@ module.exports.loop = function () {
     }
   }
 
-  for (const name in Game.rooms){
-    const room = Game.rooms[name]
-    room.controller.storage;
-  }
-
   utils.run();
   spawners.run();
   roleManager.run();
   if (Memory.stats === undefined){
     Memory.stats = {}
-
   }
 
+  Game.rooms['E38N11'].roads
 
   exportStats();
 }

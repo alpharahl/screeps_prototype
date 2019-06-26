@@ -97,7 +97,7 @@ StructureSpawn.prototype.spawnHauler = function(roomName = this.room.name){
   if (roomName != this.room.name){
     creepOpts.memory.remote = roomName;
     creepOpts.memory.home = this.room.name;
-    ideal = [MOVE, CARRY, WORK]
+    ideal = [MOVE, CARRY, WORK, MOVE]
   }
   for (var i = 0; i < 10; i++){
     ideal = ideal.concat([MOVE, CARRY])

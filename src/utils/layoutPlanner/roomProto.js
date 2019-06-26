@@ -1,4 +1,5 @@
 var Leaf = require('setup_prototype_leaf');
+var Road = require('setup_prototype_road');
 
 Object.defineProperty(Room.prototype, 'towers', {
   get(){
@@ -23,6 +24,65 @@ Object.defineProperty(Room.prototype, 'towerSites',  {
       })
     }
     return this._towerSites;
+  }
+})
+
+Object.defineProperty(Room.prototype, 'avoidArray', {
+  get(){
+    if (!this._avoidArray){
+      this._avoidArray = [];
+      if (!this.memory.avoidArray){
+        var avoidArray = [];
+        for (const leaf of this.leafs){
+          avoidArray = avoidArray.concat(leaf.noWalk);
+        }
+        // add in room storage location and above that
+        avoidArray.push(new RoomPosition(this.baseLocation.x, this.baseLocation.y - 1, this.name));
+        avoidArray.push(new RoomPosition(this.baseLocation.x, this.baseLocation.y - 2, this.name));
+        this.memory.avoidArray = avoidArray;
+      }
+      this._avoidArray = this.memory.avoidArray;
+    }
+    return this._avoidArray;
+  }
+})
+
+Room.prototype.idealPath = function(item1, item2){
+  var avoidArray = this.avoidArray
+  const path = this.findPath(item1, item2, {
+    costCallback: function(roomName, costMatrix) {
+      for (const pos of avoidArray){
+        costMatrix.set(pos.x, pos.y, 100);
+      }
+
+      for (const ind in this.sources){
+        const source = this.sources[ind]
+        if (source.link){
+          var pos = source.link.pos;
+          costMatrix.set(pos.x, pos.y, 1);
+        }
+      }
+    },
+    ignoreCreeps: true,
+    swampCost: 1
+  });
+  return path;
+}
+
+Object.defineProperty(Room.prototype, 'roads', {
+  get(){
+    if (!this._roads){
+      this._roads = {}
+      for (const source of this.sources){
+        const road = new Road(source.pos, this.storageLocation, this);
+        this._roads[source.id] = road;
+      }
+      if (this.controller.storage){
+        const road = new Road(this.controller.storage.pos, this.storageLocation, this);
+        this._roads[this.controller.storage.id] = road;
+      }
+    }
+    return this._roads;
   }
 })
 

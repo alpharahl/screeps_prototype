@@ -8,6 +8,7 @@ var planner = {
         planner.placeTowers(room);
         planner.placeExtensions(room);
         planner.placeRoads(room);
+        planner.placeRoomRoads(room);
         planner.placeStorage(room);
         planner.placeLinks(room);
         planner.placeRamparts(room);
@@ -129,6 +130,15 @@ var planner = {
       }
       // if we get here, no need to build more roads
       room.memory.bunkerRoads = "complete"
+    }
+  },
+
+  placeRoomRoads(room){
+    if (room.constructionSites.length === 0){
+      for (const ind in room.roads){
+        const road = room.roads[ind];
+        road.construct();
+      }
     }
   },
 

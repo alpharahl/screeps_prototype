@@ -128,6 +128,58 @@ Object.defineProperty(Leaf.prototype, 'spawns', {
   }
 })
 
+Object.defineProperty(Leaf.prototype, 'roads', {
+  configurable: true,
+  get(){
+    if (!this._roads){
+      if (!this.memory.roads){
+        this.memory.roads = this.buildingList(STRUCTURE_ROAD)
+      }
+      var roads = [];
+      for (const id of this.memory.roads){
+        roads.push(Game.getObjectById(id))
+      }
+      // if (this.id.includes('-3')){
+      //   roads.push(this.room.roads[0]);
+      // }
+      this._roads = roads;
+    }
+    return this._roads;
+  }
+})
+
+Object.defineProperty(Leaf.prototype, 'noWalk', {
+  get(){
+    if (!this._noWalk){
+      if (!this.memory.noWalk){
+        this.memory.noWalk = [];
+        for (var x = 0; x < 5; x++){
+          for (var y = 0; y < 5; y++){
+            this.memory.noWalk.push({x: this.startingPoint.x + x, y: this.startingPoint.y + y})
+          }
+        }
+      }
+      this._noWalk = [];
+      for (const coord of this.memory.noWalk){
+        this._noWalk.push(new RoomPosition(coord.x, coord.y, this.room.name));
+      }
+    }
+    return this._noWalk;
+  }
+})
+
+Object.defineProperty(Leaf.prototype, 'roadPositions', {
+  get(){
+    if (!this._roadPositions){
+      this._roadPositions = [];
+      for (const road of this.roads){
+        this._roadPositions.push(road.pos);
+      }
+    }
+    return this._roadPositions;
+  }
+})
+
 Object.defineProperty(Leaf.prototype, 'queen', {
   configurable: true,
   get(){
