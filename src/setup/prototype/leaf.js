@@ -168,6 +168,15 @@ Object.defineProperty(Leaf.prototype, 'noWalk', {
   }
 })
 
+Object.defineProperty(Leaf.prototype, 'idlePoint', {
+  get(){
+    if (!this._idlePoint){
+      this._idlePoint = new RoomPosition(this.startingPoint.x + 2, this.startingPoint.y + 2, this.room.name);
+    }
+    return this._idlePoint;
+  }
+})
+
 Object.defineProperty(Leaf.prototype, 'roadPositions', {
   get(){
     if (!this._roadPositions){

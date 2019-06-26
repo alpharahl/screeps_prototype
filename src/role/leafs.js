@@ -23,6 +23,7 @@ module.exports = {
           if (queen.energy < queen.carryCapacity) {
             queen.working = false
           }
+          queen.moveTo(leaf.idlePoint)
         } else {
           queen.speak("☀️");
           if (this.emptyLink(leaf, queen)) {

@@ -47,22 +47,35 @@ Object.defineProperty(Room.prototype, 'avoidArray', {
   }
 })
 
+Object.defineProperty(Room.prototype, 'cMatrix', {
+  get(){
+    if (!this._cMatrix){
+      if (!this.memory.cMatrix){
+        const cMatrix = function(roomName, costMatrix) {
+          for (const pos of avoidArray) {
+            costMatrix.set(pos.x, pos.y, 100);
+          }
+
+          for (const ind in this.sources) {
+            const source = this.sources[ind]
+            if (source.link) {
+              var pos = source.link.pos;
+              costMatrix.set(pos.x, pos.y, 1);
+            }
+          }
+        }
+        this.memory.cMatrix = cMatrix.serialize();
+      }
+      this._cMatrix = PathFinder.CostMatrix.deserialize(this.memory.cMatrix);
+    }
+    return this._cMatrix;
+  }
+})
+
 Room.prototype.idealPath = function(item1, item2){
   var avoidArray = this.avoidArray
   const path = this.findPath(item1, item2, {
-    costCallback: function(roomName, costMatrix) {
-      for (const pos of avoidArray){
-        costMatrix.set(pos.x, pos.y, 100);
-      }
-
-      for (const ind in this.sources){
-        const source = this.sources[ind]
-        if (source.link){
-          var pos = source.link.pos;
-          costMatrix.set(pos.x, pos.y, 1);
-        }
-      }
-    },
+    costCallback: this.cMatrix,
     ignoreCreeps: true,
     swampCost: 1
   });
