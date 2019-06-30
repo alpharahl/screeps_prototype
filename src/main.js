@@ -10,11 +10,7 @@ var utils = require('utils_utils');
 function exportStats() {
 
   // Reset stats object
-  Memory.stats = {
-    gcl: {},
-    rooms: {},
-    cpu: {},
-  };
+
 
   Memory.stats.time = Game.time;
   for (const roomName in Game.rooms) {
@@ -58,8 +54,20 @@ function exportStats() {
 }
 module.exports.loop = function () {
 
+  Memory.stats = {
+    gcl: {},
+    rooms: {},
+    cpu: {
+      creeps: {
+        breakdown: {
+          queens: {}
+        }
+      }
+    },
+  };
+
   for (const roomName in Game.rooms){
-    const room =Game.rooms[roomName];
+    const room = Game.rooms[roomName];
     var towers = room.find(FIND_MY_STRUCTURES, {
       filter: (i) => {
         return i.structureType == STRUCTURE_TOWER
@@ -97,14 +105,18 @@ module.exports.loop = function () {
     }
   }
 
-  utils.run();
-  spawners.run();
-  roleManager.run();
-  if (Memory.stats === undefined){
-    Memory.stats = {}
-  }
+  Memory.stats.cpu.towers = Game.cpu.getUsed();
 
-  Game.rooms['E38N11'].roads
+  utils.run();
+  Memory.stats.cpu.utils = Game.cpu.getUsed() - parseInt(Memory.stats.cpu.towers);
+
+  spawners.run();
+  Memory.stats.cpu.spawning = Game.cpu.getUsed() - parseInt(Memory.stats.cpu.towers) - parseInt(Memory.stats.cpu.utils)
+
+  roleManager.run();
+  Memory.stats.cpu.roles = Game.cpu.getUsed() - parseInt(Memory.stats.cpu.towers) - parseInt(Memory.stats.cpu.utils) - parseInt(Memory.stats.cpu.spawning)
+
+  // Game.rooms['E38N11'].roads
 
   exportStats();
 }
