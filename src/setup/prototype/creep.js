@@ -67,7 +67,15 @@ Creep.prototype.getEnergy = function(){
       if (this.withdraw(container, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE){
         this.moveTo(container)
       }
+    } else {
+      this.getEnergyForHaul()
     }
+  }
+}
+
+Creep.prototype.sign = function(){
+  if (this.room.controller){
+    this.signController(this.room.controller, CONTROLLER_SIGN);
   }
 }
 

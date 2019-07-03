@@ -4,6 +4,8 @@ Creep.prototype.upgrade = function(){
     this.speak('👆')
     if (this.upgradeController(this.room.controller) === ERR_NOT_IN_RANGE){
       this.moveTo(this.room.controller)
+    } else {
+      this.sign();
     }
   } else {
     this.speak('☀️')

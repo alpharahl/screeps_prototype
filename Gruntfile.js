@@ -35,9 +35,23 @@ module.exports = function(grunt){
             return dest + src.replace(/\//g,'_');
           }
         }],
+      },
+      private: {
+        files: [{
+          expand: true,
+          cwd: 'src/',
+          src: '**',
+          dest: '../../../AppData/Local/Screeps/scripts/192_168_86_242___21025/default/',
+          filter: 'isFile',
+          rename: function (dest, src) {
+            // Change the path name utilize underscores for folders
+            return dest + src.replace(/\//g,'_');
+          }
+        }],
       }
     }
   })
 
   grunt.registerTask('default',  ['clean', 'copy:screeps', 'screeps']);
+  grunt.registerTask('private', ['clean', 'copy:private']);
 }

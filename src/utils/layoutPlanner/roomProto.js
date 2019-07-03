@@ -51,19 +51,20 @@ Object.defineProperty(Room.prototype, 'cMatrix', {
   get(){
     if (!this._cMatrix){
       if (!this.memory.cMatrix){
-        const cMatrix = function(roomName, costMatrix) {
-          for (const pos of avoidArray) {
-            costMatrix.set(pos.x, pos.y, 100);
-          }
+        var avoidArray = this.avoidArray
+        const cMatrix = new PathFinder.CostMatrix;
+        for (const pos of avoidArray) {
+          cMatrix.set(pos.x, pos.y, 100);
+        }
 
-          for (const ind in this.sources) {
-            const source = this.sources[ind]
-            if (source.link) {
-              var pos = source.link.pos;
-              costMatrix.set(pos.x, pos.y, 1);
-            }
+        for (const ind in this.sources) {
+          const source = this.sources[ind]
+          if (source.link) {
+            var pos = source.link.pos;
+            cMatrix.set(pos.x, pos.y, 1);
           }
         }
+
         this.memory.cMatrix = cMatrix.serialize();
       }
       this._cMatrix = PathFinder.CostMatrix.deserialize(this.memory.cMatrix);
@@ -73,7 +74,7 @@ Object.defineProperty(Room.prototype, 'cMatrix', {
 })
 
 Room.prototype.idealPath = function(item1, item2){
-  var avoidArray = this.avoidArray
+
   const path = this.findPath(item1, item2, {
     costCallback: this.cMatrix,
     ignoreCreeps: true,
@@ -93,6 +94,17 @@ Object.defineProperty(Room.prototype, 'roads', {
       if (this.controller.storage){
         const road = new Road(this.controller.storage.pos, this.storageLocation, this);
         this._roads[this.controller.storage.id] = road;
+      }
+      for (const name of this.reserveRooms){
+        const room = Game.rooms[name];
+        if (room){
+          for (const source of room.sources){
+            const road = new Road(source.pos, this.storageLocation, this);
+            this._roads[source.id] = road;
+          }
+          const road = new Road(this.controller.pos, this.storageLocation, this);
+          this._roads[this.controller.id] = road;
+        }
       }
     }
     return this._roads;

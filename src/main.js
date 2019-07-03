@@ -60,7 +60,8 @@ module.exports.loop = function () {
     cpu: {
       creeps: {
         breakdown: {
-          queens: {}
+          queens: {},
+          miners: {}
         }
       }
     },
@@ -115,8 +116,6 @@ module.exports.loop = function () {
 
   roleManager.run();
   Memory.stats.cpu.roles = Game.cpu.getUsed() - parseInt(Memory.stats.cpu.towers) - parseInt(Memory.stats.cpu.utils) - parseInt(Memory.stats.cpu.spawning)
-
-  // Game.rooms['E38N11'].roads
 
   exportStats();
 }

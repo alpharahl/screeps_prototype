@@ -296,7 +296,7 @@ Object.defineProperty(Room.prototype, 'scoutTarget', {
 Object.defineProperty(Room.prototype, 'reserveRooms', {
   get(){
     if (!this._reserveRooms){
-      if (!this.memory.reserveRooms || Game.time % 750 === 0){
+      if (!this.memory.reserveRooms || Game.time % 750 === 0 && this.controller.level >= 4){
         this.memory.reserveRooms = [];
         for (const name in this.memory.scoutReports){
           const report = this.memory.scoutReports[name];

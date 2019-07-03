@@ -19,6 +19,7 @@ Reserver.prototype.run = function(){
       if (this.ticksToLive && this.creep.ticksToLive === this.memory.ticksToTravel){
         Game.rooms[this.memory.home].memory.reservers[this.room.name] = null;
       }
+      this.creep.sign();
     }
 
   } else {

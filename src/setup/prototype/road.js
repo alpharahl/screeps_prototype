@@ -8,6 +8,7 @@ function Road(pos1, pos2, room){
 Object.defineProperty(Road.prototype, 'path', {
   get(){
     if (!this._path){
+      this.memory.path = null;
       if (!this.memory.path){
         this.memory.path = Room.serializePath(this.room.idealPath(this.start, this.end));
       }
@@ -42,6 +43,7 @@ Object.defineProperty(Road.prototype, 'ids', {
 Object.defineProperty(Road.prototype, 'positions', {
   get(){
     if (!this._positions){
+      this.memory.positions = null;
       if (!this.memory.positions){
         var positions = [];
         for (const ind in this.path){
@@ -77,9 +79,9 @@ Object.defineProperty(Road.prototype, 'emptySpots', {
 Road.prototype.construct = function(){
   for (const spot of this.emptySpots){
     new RoomVisual(this.room.name).circle(spot, {fill: 'blue'})
-    if (spot.createConstructionSite(STRUCTURE_ROAD) === 'OK'){
-      return;
-    }
+    // if (spot.createConstructionSite(STRUCTURE_ROAD) === 'OK'){
+    //   return;
+    // }
   }
 }
 

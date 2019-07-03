@@ -9,3 +9,9 @@ global.RESERVE_BODY = [
   CLAIM,
   CLAIM
 ]
+
+global.CONTROLLER_SIGN="Alpha Lima Papa Hotel Alpha"
+
+
+global.UPGRADER_GOAL_MIN=100000;
+global.UPGRADER_GOAL_MAX=200000;

@@ -1,7 +1,7 @@
 Creep.prototype.haul = function() {
   this.isWorking();
   if (this.working) {
-    if (this.moveToRoom(this.memory.home)){
+    if (this.memory.home && this.moveToRoom(this.memory.home)){
       return;
     }
     if (this.room.queens.length === 0){
@@ -30,7 +30,7 @@ Creep.prototype.haul = function() {
       this.fillStorage();
     }
   }else {
-    if (this.moveToRoom(this.memory.remote)){
+    if (this.memory.home && this.moveToRoom(this.memory.remote)){
       return;
     }
     this.speak('☀️')
