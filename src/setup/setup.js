@@ -8,10 +8,3 @@ require('setup_prototype_controller')
 require('setup_prototype_storage');
 require('setup_prototype_link');
 require('setup_prototype_road');
-
-for (var name in Memory.creeps){
-  if (!Game.creeps[name]){
-    delete Memory.creeps[name];
-    console.log("Clearing out old creeps memory:", name);
-  }
-}

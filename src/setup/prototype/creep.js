@@ -4,6 +4,7 @@ require('setup_prototype_creeps_builder');
 require('setup_prototype_creeps_hauler');
 require('setup_prototype_creeps_queen');
 require('setup_prototype_creeps_reserver');
+require('setup_prototype_creeps_remoteHaulers');
 
 Creep.prototype.speak = function(words){
   this.say(words || this.type, true);
@@ -29,21 +30,28 @@ Object.defineProperty(Creep.prototype, 'energy', {
 
 Creep.prototype._moveTo = Creep.prototype.moveTo;
 Creep.prototype.moveTo = function(target){
-  if (this.memory.type === 'queen'){
+  if (this.memory.type === 'queen') {
     let cMatrix = new PathFinder.CostMatrix;
-    for (const spot of this.room.queenAvoid){
+    for (const spot of this.room.queenAvoid) {
       cMatrix.set(spot.x, spot.y, 30);
     }
     this._moveTo(target, {
       reusePath: 10,
-      costCallback: cMatrix
+      costCallback: cMatrix,
+    });
+  } else if (this.memory.type === 'hauler'){
+    this._moveTo(target, {
+      reusePath: 25,
+      // ignoreCreeps: true,
+      plainCost: 4,
+      swampCost: 10
     });
   } else {
     this._moveTo(target);
   }
 }
 
-Creep.prototype.moveToRoom = function(roomName){
+Creep.prototype.moveToRoom = function(roomName, buildRoad = false){
   if (this.room.name === roomName){
     return false;
   }

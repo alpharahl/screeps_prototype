@@ -4,17 +4,7 @@ var upgraderSpawner = {
       return;
     }
     if (room.bestSpawner){
-      var upgraderCount = 2;
-      if (room.storage){
-        upgraderCount = 1;
-
-        if (room.storage.store[RESOURCE_ENERGY] > UPGRADER_GOAL_MIN){
-          upgraderCount = 2;
-        }
-        if (room.storage.store[RESOURCE_ENERGY] > UPGRADER_GOAL_MAX){
-          upgraderCount = 3;
-        }
-      }
+      var upgraderCount = 1;
       if (room.upgraders.length < upgraderCount){
         room.bestSpawner.spawnUpgrader();
       }

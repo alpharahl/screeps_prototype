@@ -1,19 +1,19 @@
 var minerSpawner = {
   run(room){
-    for (const sourceId in room.miners){
-      if (room.miners[sourceId] == null){
+    for (const source of room.sources){
+      if (!source.miner){
         if (room.bestSpawner){
-          room.bestSpawner.spawnMiner(sourceId);
+          room.bestSpawner.spawnMiner(source);
         }
       }
     }
   },
 
   remoteRun(room){
-    for (const sourceId in room.miners){
-      if (room.miners[sourceId] === null){
+    for (const source of room.sources){
+      if (!source.miner){
         if (room.bestSpawner){
-          room.bestSpawner.spawnMiner(sourceId, room.name);
+          room.bestSpawner.spawnMiner(source, room.name);
         }
       }
     }

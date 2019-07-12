@@ -1,9 +1,6 @@
 var haulerSpawner = {
   run(room){
-    var haulerCount = 2;
-    if ( room.storage && room.storage.energy > 0){
-      haulerCount = 2;
-    }
+    var haulerCount = room.sources.length;
     for (const source of room.sources){
       if (source.link){
         haulerCount--;
@@ -17,10 +14,11 @@ var haulerSpawner = {
   },
 
   remoteRun(room){
-    var haulerCount = 2;
-    if (room.haulers.length < haulerCount){
-      if (room.bestSpawner){
-        room.bestSpawner.spawnHauler(room.name);
+    for (const source of room.sources){
+      if (!source.hauler){
+        if (room.bestSpawner){
+          room.bestSpawner.spawnRemoteHauler(source, room.name);
+        }
       }
     }
   }

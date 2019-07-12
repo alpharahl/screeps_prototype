@@ -15,7 +15,7 @@ function Leaf(room, p1, id){
 Object.defineProperty(Leaf.prototype, 'ids', {
   get (){
     if (!this._ids){
-      if (!this.memory.ids || Game.time % 200 === 0){
+      if (!this.memory.ids || Game.time % 1000 === 0){
         var ids = [];
         const validStructs = [
           STRUCTURE_EXTENSION,
@@ -32,8 +32,8 @@ Object.defineProperty(Leaf.prototype, 'ids', {
                 return validStructs.includes(i.structureType)
               }
             })
-            if (structs.length > 0){
-              ids.push(structs[0].id);
+            for (const struct of structs){
+              ids.push(struct.id);
             }
 
           }
@@ -78,7 +78,7 @@ Object.defineProperty(Leaf.prototype, 'extensions', {
   configurable: true,
   get(){
     if (!this._extensions){
-      if (!this.memory.extensions){
+      if (!this.memory.extensions || Game.time % 200 === 0){
         this.memory.extensions = this.buildingList(STRUCTURE_EXTENSION)
       }
       var extensions = [];
@@ -121,6 +121,11 @@ Object.defineProperty(Leaf.prototype, 'spawns', {
       }
       if (this.id.includes('-3')){
         spawns.push(this.room.spawns[0]);
+      }
+      if (this.id.includes('-2')){
+        if (this.room.spawns[1]){
+          spawns.push(this.room.spawns[1]);
+        }
       }
       this._spawns = spawns;
     }

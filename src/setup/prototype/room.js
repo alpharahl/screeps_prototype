@@ -1,3 +1,5 @@
+var RemoteRoom = require('setup_prototype_remoteRoom');
+
 Object.defineProperty(Room.prototype, 'sources', {
   get: function(){
     if (!this._sources){
@@ -43,7 +45,7 @@ Object.defineProperty(Room.prototype, 'bestSpawner', {
         if (this.spawns.length > 0 && this.energyAvailable >= 300){
           for (const spawn of this.spawns){
             if (!spawn.spawning){
-              this._bestSpawner = this.spawns[0];
+              this._bestSpawner = spawn;
               return this._bestSpawner;
             }
           }
@@ -208,6 +210,11 @@ Object.defineProperty(Room.prototype, 'creeps', {
   get: function(){
     if (!this._creeps){
       this._creeps = this.find(FIND_MY_CREEPS)
+      for (const spawn of this.spawns){
+        if (spawn.spawning){
+          this._creeps.push(Game.creeps[spawn.spawning.name])
+        }
+      }
       if (this.memory.home){
         this._creeps = this._creeps.concat(this.home.find(FIND_MY_CREEPS, {
           filter: (i) => {
@@ -230,6 +237,12 @@ Object.defineProperty(Room.prototype, 'constructionSites', {
     return this._sites;
   }
 })
+
+Room.prototype.removeSites = function(){
+  for (const site of this.constructionSites){
+    site.remove();
+  }
+}
 
 Object.defineProperty(Room.prototype, 'expandable', {
   get (){
@@ -269,15 +282,27 @@ Object.defineProperty(Room.prototype, 'neighbors', {
 Object.defineProperty(Room.prototype, 'scoutTarget', {
   get(){
     if (!this._scoutTarget){
-      if (!this.memory.scoutReports){
-        this.memory.scoutReports = {}
+      if (!this.memory.scoutReports || Game.time % 1 === 0){
+        if (!this.memory.scoutReports){
+          this.memory.scoutReports = {}
+        }
         for (const direction in this.neighbors){
           const name = this.neighbors[direction]
-          if (Game.rooms[name]){
-            continue;
+          if (!this.memory.scoutReports[name]){
+            this.memory.scoutReports[name] = {
+              lastSeen: 0
+            }
           }
-          this.memory.scoutReports[name] = {
-            lastSeen: 0
+          const exits = Game.map.describeExits(name);
+          for (const d in exits){
+            const neighborName = exits[d];
+            if (Game.map.isRoomAvailable(neighborName)){
+              if (!this.memory.scoutReports[neighborName]){
+                this.memory.scoutReports[neighborName] = {
+                  lastSeen: 0
+                }
+              }
+            }
           }
         }
       }
@@ -311,6 +336,39 @@ Object.defineProperty(Room.prototype, 'reserveRooms', {
   }
 })
 
+Room.prototype.remoteRoads = function(){
+  for (const room of this.remoteRooms){
+    room.sourceRoads();
+  }
+}
+
+Room.prototype.resetScout = function(){
+  for (const name in this.memory.scoutReports){
+    this.memory.scoutReports[name].lastSeen = 0;
+  }
+}
+
+Room.prototype.drawPath = function(path, color = 'red'){
+  for (const step of path){
+    new RoomVisual(this.name).circle(new RoomPosition(step.x, step.y, this.name), {fill: color})
+  }
+}
+
+Object.defineProperty(Room.prototype, 'remoteRooms', {
+  get(){
+    if (!this._remoteRooms){
+      this._remoteRooms = [];
+      for (const name of this.reserveRooms){
+        const room = Game.rooms[name];
+        if (room){
+          this._remoteRooms.push(new RemoteRoom(room))
+        }
+      }
+    }
+    return this._remoteRooms;
+  }
+})
+
 Object.defineProperty(Room.prototype, 'criticalWallsAndRamparts', {
   get (){
     if (!this._criticalWallsAndRamparts){
@@ -340,7 +398,7 @@ Room.prototype.removeAllWalls = function(){
 Object.defineProperty(Room.prototype, 'baseLocation', {
   get: function(){
     if (!this._baseLocation){
-      if (this.memory.home){
+      if (this.memory.home && this.memory.home !== this.name){
         this._baseLocation = Game.rooms[this.memory.home].baseLocation
       } else {
         if (this.find(FIND_MY_SPAWNS).length > 0) {

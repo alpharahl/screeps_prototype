@@ -1,7 +1,7 @@
 global.WALL_HEALTH = 100000;
 global.WALL_CRITICAL = 10000;
 global.CONSIDER_SCOUTING_OLD = 5000;
-global.AVOID = []
+global.AVOID = ['E39N12']
 global.RESERVE_BODY = [
   MOVE,
   MOVE,
@@ -15,3 +15,4 @@ global.CONTROLLER_SIGN="Alpha Lima Papa Hotel Alpha"
 
 global.UPGRADER_GOAL_MIN=100000;
 global.UPGRADER_GOAL_MAX=200000;
+global.UPGRADER_SCALE=30000;

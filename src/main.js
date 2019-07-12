@@ -111,6 +111,7 @@ module.exports.loop = function () {
   utils.run();
   Memory.stats.cpu.utils = Game.cpu.getUsed() - parseInt(Memory.stats.cpu.towers);
 
+
   spawners.run();
   Memory.stats.cpu.spawning = Game.cpu.getUsed() - parseInt(Memory.stats.cpu.towers) - parseInt(Memory.stats.cpu.utils)
 
@@ -118,4 +119,13 @@ module.exports.loop = function () {
   Memory.stats.cpu.roles = Game.cpu.getUsed() - parseInt(Memory.stats.cpu.towers) - parseInt(Memory.stats.cpu.utils) - parseInt(Memory.stats.cpu.spawning)
 
   exportStats();
+
+
+  for (var name in Memory.creeps){
+    if (!Game.creeps[name]){
+      delete Memory.creeps[name];
+      //console.log("Clearing out old creeps memory:", name);
+    }
+  }
+
 }

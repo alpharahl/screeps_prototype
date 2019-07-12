@@ -11,6 +11,7 @@ module.exports = {
           const startCpuExtensions = Game.cpu.getUsed();
           const existingExtensions = parseFloat(Memory.stats.cpu.creeps.breakdown.queens.extensions);
           if (this.fillExtensions(leaf, queen)) {
+            queen.memory.idle = false;
             continue;
           }
           Memory.stats.cpu.creeps.breakdown.queens.extensions = Game.cpu.getUsed() - startCpuExtensions;
@@ -21,6 +22,7 @@ module.exports = {
           const startSpawnCpu = Game.cpu.getUsed();
           const existingSpawn = parseFloat(Memory.stats.cpu.creeps.breakdown.queens.spawns);
           if (this.fillSpawns(leaf, queen)){
+            queen.memory.idle = false;
             continue;
           }
           Memory.stats.cpu.creeps.breakdown.queens.spawns = Game.cpu.getUsed() - startSpawnCpu;
@@ -31,6 +33,7 @@ module.exports = {
           const startTowerCpu = Game.cpu.getUsed();
           const existingTower = parseFloat(Memory.stats.cpu.creeps.breakdown.queens.towers);
           if (this.fillTowers(leaf, queen)) {
+            queen.memory.idle = false;
             continue;
           }
           Memory.stats.cpu.creeps.breakdown.queens.towers = Game.cpu.getUsed() - startTowerCpu;
@@ -42,6 +45,7 @@ module.exports = {
           const startingUpgraderCpu = Game.cpu.getUsed();
           const existingUpgrader = parseFloat(Memory.stats.cpu.creeps.breakdown.queens.upgrader);
           if (leaf.id.includes('-4')){
+            queen.memory.idle = false;
             queen.fillUpgrader();
             break;;
           }
@@ -54,6 +58,7 @@ module.exports = {
           const existingLinks = parseFloat(Memory.stats.cpu.creeps.breakdown.queens.links);
           if (leaf.links.length > 0 && leaf.links[0].energy > 0) {
             this.empty(leaf, queen);
+            queen.memory.idle = false;
             break;
           }
           Memory.stats.cpu.creeps.breakdown.queens.links = Game.cpu.getUsed() - startingLinkCpu;
@@ -63,13 +68,18 @@ module.exports = {
 
 
           if (queen.energy < queen.carryCapacity) {
+            queen.memory.idle = false;
             queen.working = false
           }
 
           const startingIdle = Game.cpu.getUsed();
           const existingIdle = parseFloat(Memory.stats.cpu.creeps.breakdown.queens.idleTime);
-          if (queen.pos !== leaf.idlePoint){
-            queen.moveTo(leaf.idlePoint)
+          if (!queen.memory.idle){
+            if (queen.pos !== leaf.idlePoint){
+              queen.moveTo(leaf.idlePoint)
+            } else {
+              queen.memory.idle = true;
+            }
           }
           Memory.stats.cpu.creeps.breakdown.queens.idleTime = Game.cpu.getUsed() - startingIdle;
           if (existingIdle){
@@ -80,6 +90,10 @@ module.exports = {
           queen.speak("☀️");
           if (this.emptyLink(leaf, queen)) {
             continue;
+          }
+          if (queen.room.storage.store[RESOURCE_ENERGY] === 0){
+            queen.moveTo(leaf.idlePoint)
+            return;
           }
           if (queen.withdraw(queen.room.storage, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
             queen.moveTo(queen.room.storage);

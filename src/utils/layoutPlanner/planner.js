@@ -12,6 +12,8 @@ var planner = {
         planner.placeStorage(room);
         planner.placeLinks(room);
         planner.placeRamparts(room);
+        planner.placeSpawn(room);
+        planner.placeRemoteRoads(room);
         if (Game.time % 10000 === 0){
           room.removeAllWalls();
         }
@@ -39,6 +41,10 @@ var planner = {
         }
       }
     }
+  },
+
+  placeRemoteRoads(room){
+    room.remoteRoads();
   },
 
   placeRamparts(room){
@@ -86,6 +92,23 @@ var planner = {
         if (placement === 'b'){
           const pos = planner.getPos(parseInt(pInd), parseInt(rowInd), room);
           pos.createConstructionSite(STRUCTURE_STORAGE);
+        }
+      }
+    }
+  },
+
+  placeSpawn(room){
+    if (room.spawns.length === CONTROLLER_STRUCTURES['spawn'][room.controller.level]){
+      return;
+    }
+    for (const rowInd in LAYOUT){
+      const row = LAYOUT[rowInd];
+      for (const pInd in row){
+        const placement = row[pInd];
+        if (placement === 's'){
+          const pos = planner.getPos(parseInt(pInd), parseInt(rowInd), room);
+          pos.createConstructionSite(STRUCTURE_SPAWN);
+          break;
         }
       }
     }

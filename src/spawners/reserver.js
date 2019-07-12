@@ -12,7 +12,7 @@ module.exports = {
         room.memory.reservers[roomName] = null;
       }
       var targetRoom = Game.rooms[roomName]
-      if (targetRoom && targetRoom.controller.reservation && targetRoom.controller.reservation.ticksToEnd < 1000){
+      if (!targetRoom || (targetRoom && targetRoom.controller.reservation && targetRoom.controller.reservation.ticksToEnd < 2500)){
         if (room.bestSpawner){
           room.bestSpawner.spawnReserver(roomName)
         }

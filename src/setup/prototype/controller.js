@@ -11,9 +11,7 @@ Object.defineProperty(StructureController.prototype, 'storage', {
           }
         } else if (this.room.memory.controllerStorage === 'building'){
           var posMem = this.room.memory.controllerStoragePos;
-          console.log('1')
           var pos = new RoomPosition(posMem.x, posMem.y, this.room.name);
-          console.log('2')
           var containers = pos.lookFor(LOOK_STRUCTURES);
           if (containers.length > 0){
             var container = containers[0];

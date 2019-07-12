@@ -78,6 +78,47 @@ Object.defineProperty(Source.prototype, 'distToBase', {
   }
 })
 
+Object.defineProperty(Source.prototype, 'miner', {
+  get (){
+    if (!this._miner){
+      if (this.memory.miner){
+        if (Game.creeps[this.memory.miner]){
+          this._miner = Game.creeps[this.memory.miner];
+        } else {
+          this.memory.miner = null;
+        }
+      }
+    }
+    return this._miner;
+  }
+})
+
+Object.defineProperty(Source.prototype, 'hauler', {
+  get(){
+    if (!this.container){
+      return true;
+    }
+    if (!this._hauler){
+      if (this.memory.hauler){
+        if (Game.creeps[this.memory.hauler]){
+          this._hauler = Game.creeps[this.memory.hauler]
+        } else {
+          this.memory.hauler = null;
+        }
+      }
+    }
+    return this._hauler;
+  }
+})
+
+Source.prototype.setMiner = function(name){
+  this.memory.miner = name;
+}
+
+Source.prototype.setHauler = function(name){
+  this.memory.hauler = name;
+}
+
 Object.defineProperty(Source.prototype, 'memory', {
   configurable: true,
   get: function() {

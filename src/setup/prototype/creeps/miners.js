@@ -34,6 +34,8 @@ Creep.prototype.mine = function(){
 
   if (this.pos.x === position.x && this.pos.y === position.y){
 
+    this.memory.working = true;
+
     const startHarvest = Game.cpu.getUsed();
     const harvesting = parseFloat(Memory.stats.cpu.creeps.breakdown.miners.harvesting);
     this.speak('⛏');

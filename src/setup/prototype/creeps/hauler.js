@@ -1,7 +1,14 @@
 Creep.prototype.haul = function() {
   this.isWorking();
   if (this.working) {
-    if (this.memory.home && this.moveToRoom(this.memory.home)){
+    this.findAndRepairRoad()
+    if (this.memory.home && this.room.name !== this.memory.home){
+      if (this.room.find(FIND_CONSTRUCTION_SITES).length > 0){
+        this.buildRun();
+        return;
+      }
+    }
+    if (this.memory.home && this.moveToRoom(this.memory.home, true)){
       return;
     }
     if (this.room.queens.length === 0){
@@ -30,7 +37,7 @@ Creep.prototype.haul = function() {
       this.fillStorage();
     }
   }else {
-    if (this.memory.home && this.moveToRoom(this.memory.remote)){
+    if (this.memory.home && this.moveToRoom(this.memory.remote, true)){
       return;
     }
     this.speak('☀️')
@@ -38,11 +45,20 @@ Creep.prototype.haul = function() {
   }
 }
 
+Creep.prototype.findAndRepairRoad = function(){
+  var roads = this.pos.lookFor(LOOK_STRUCTURES);
+  for (const road of roads){
+    if (road.structureType === STRUCTURE_ROAD){
+      this.repair(road);
+    }
+  }
+}
+
 Creep.prototype.getEnergyForHaul = function(){
   var dropped = this.pos.findClosestByPath(FIND_DROPPED_RESOURCES, {
     filter: (i) => {
       return i.resourceType === RESOURCE_ENERGY &&
-        i.amount > 150
+        i.amount > this.carryCapacity * 2/3
     }
   })
   if (dropped){

@@ -50,11 +50,11 @@ Object.defineProperty(Room.prototype, 'avoidArray', {
 Object.defineProperty(Room.prototype, 'cMatrix', {
   get(){
     if (!this._cMatrix){
-      if (!this.memory.cMatrix){
+      // if (!this.memory.cMatrix){
         var avoidArray = this.avoidArray
-        const cMatrix = new PathFinder.CostMatrix;
+        let cMatrix = new PathFinder.CostMatrix();
         for (const pos of avoidArray) {
-          cMatrix.set(pos.x, pos.y, 100);
+          cMatrix.set(pos.x, pos.y, 255);
         }
 
         for (const ind in this.sources) {
@@ -63,11 +63,12 @@ Object.defineProperty(Room.prototype, 'cMatrix', {
             var pos = source.link.pos;
             cMatrix.set(pos.x, pos.y, 1);
           }
+          cMatrix.set(source.miningSpot.x, source.miningSpot.y, 255)
         }
 
-        this.memory.cMatrix = cMatrix.serialize();
-      }
-      this._cMatrix = PathFinder.CostMatrix.deserialize(this.memory.cMatrix);
+        // this.memory.cMatrix = cMatrix.serialize();
+      // }
+      this._cMatrix = cMatrix;
     }
     return this._cMatrix;
   }
@@ -78,7 +79,7 @@ Room.prototype.idealPath = function(item1, item2){
   const path = this.findPath(item1, item2, {
     costCallback: this.cMatrix,
     ignoreCreeps: true,
-    swampCost: 1
+    swampCost: 2
   });
   return path;
 }
@@ -141,13 +142,13 @@ Object.defineProperty(Room.prototype, 'leafs', {
   get(){
     if (!this._leafs){
       this._leafs = [];
-      if (this.controller.level > 1){
+      if (this.controller && this.controller.level > 1){
         this._leafs = [
           this.leaf1,
           this.leaf2
         ]
       }
-      if (this.controller.level > 5){
+      if (this.controller && this.controller.level > 5){
         this._leafs = this._leafs.concat([
           this.leaf3,
           this.leaf4
