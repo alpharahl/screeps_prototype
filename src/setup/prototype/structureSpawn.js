@@ -47,7 +47,7 @@ StructureSpawn.prototype.spawnUpgrader = function(){
   if (this.room.storage){
     ideal = [];
     var storedCalc = this.room.storage.store[RESOURCE_ENERGY]/UPGRADER_SCALE;
-    if (room.controller.level === 8 && storedCalc > 5){
+    if (this.room.controller.level === 8 && storedCalc > 5){
       storedCalc = 5;
     }
     for (var n = 0; n < storedCalc; n++){

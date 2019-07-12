@@ -5,6 +5,9 @@ Creep.prototype.upgrade = function(){
     if (this.upgradeController(this.room.controller) === ERR_NOT_IN_RANGE){
       this.moveTo(this.room.controller)
     } else {
+      if (this.room.controller.storage){
+        this.withdraw(this.room.controller.storage, RESOURCE_ENERGY);
+      }
       this.sign();
     }
   } else {
