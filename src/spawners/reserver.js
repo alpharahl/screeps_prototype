@@ -7,7 +7,7 @@ module.exports = {
       if (room.memory.reservers[roomName]){
         var creep = Game.creeps[room.memory.reservers[roomName]];
         if(creep){
-          return;
+          continue;
         }
         room.memory.reservers[roomName] = null;
       }
