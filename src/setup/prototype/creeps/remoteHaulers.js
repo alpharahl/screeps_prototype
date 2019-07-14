@@ -8,13 +8,30 @@ Creep.prototype.remoteHaul = function(){
         return;
       }
     }
-    if (this.memory.home && this.moveToRoom(this.memory.home, true)){
+    var res = ERR_NOT_FOUND;
+    if (this.remoteSource){
+      res = this.moveByPath(this.remoteSource.pathToStorage);
+    }
+    this.speak(res);
+    if (res === OK){
       return;
+    } else if (res === ERR_NOT_FOUND){
+      this.moveTo(new RoomPosition(25,25,this.memory.home));
     }
     this.fillStorage();
   } else {
-    if (this.memory.home && this.moveToRoom(this.memory.remote, true)){
+    var res = ERR_NOT_FOUND;
+    if (this.remoteSource){
+      res = this.moveByPath(this.remoteSource.pathFromStorage);
+    }
+    if (res === OK){
       return;
+    } else if(res === ERR_NOT_FOUND){
+      if (this.remoteSource){
+        this.moveTo(this.remoteSource.container);
+      } else {
+        this.moveTo(new RoomPosition(25,25, this.memory.remote))
+      }
     }
     if (this.removeOldStructures()){
       return;
@@ -44,8 +61,10 @@ Object.defineProperty(Creep.prototype, 'remoteSource', {
 })
 
 Creep.prototype.pickupFromSource = function(){
-  var res = this.withdraw(this.remoteSource.container, RESOURCE_ENERGY)
-  if (res === ERR_NOT_IN_RANGE){
-    this.moveTo(this.remoteSource.container);
+  if (this.remoteSource){
+    this.withdraw(this.remoteSource.container, RESOURCE_ENERGY)
+  } else {
+    this.moveTo(new RoomPosition(25,25,this.memory.remote));
   }
+
 }

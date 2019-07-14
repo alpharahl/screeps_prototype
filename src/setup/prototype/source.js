@@ -78,6 +78,110 @@ Object.defineProperty(Source.prototype, 'distToBase', {
   }
 })
 
+Object.defineProperty(Source.prototype, 'pathFromStorage', {
+  get () {
+    if (!this._pathFromStorage){
+      if (this.room.home.storage){
+        if (!this.memory.pathFromStorage){
+          this.memory.pathFromStorage = PathFinder.search(this.room.home.storage.pos, {pos: this.pos, range: 1}, {
+            ignoreCreeps: true,
+            swampCost: 2,
+            plainCost: 2,
+            roomCallback(name){
+              const room = Game.rooms[name];
+              if (!room) return;
+              let costs = new PathFinder.CostMatrix;
+
+              var roads = room.find(FIND_STRUCTURES, {
+                filter: (i) => {
+                  return i.structureType === STRUCTURE_ROAD
+                }
+              })
+              for (const sInd in roads){
+                const struct = roads[sInd];
+                costs.set(struct.pos.x, struct.pos.y, 1);
+              }
+
+              // don't step in leafs
+              for (const leaf of room.leafs){
+                for (const step of leaf.noWalk){
+                  costs.set(step.x, step.y, 50);
+                }
+              }
+
+              for (const source of room.sources){
+                const spot = source.miningSpot;
+                costs.set(spot.x, spot.y, 255);
+              }
+
+              return costs;
+            }
+          }).path
+        }
+        const startcpu = Game.cpu.getUsed();
+        this._pathFromStorage = [];
+        for (const p of this.memory.pathFromStorage){
+          this._pathFromStorage.push(new RoomPosition(p.x, p.y, p.roomName));
+        }
+        console.log('Used (from):', Game.cpu.getUsed() - startcpu)
+      }
+    }
+    return this._pathFromStorage;
+  }
+})
+
+Object.defineProperty(Source.prototype, 'pathToStorage', {
+  get () {
+    if (!this._pathToStorage){
+      if (this.room.home.storage){
+        if (!this.memory.pathToStorage){
+          this.memory.pathToStorage = PathFinder.search(this.pos, {pos: this.room.home.storage.pos, range: 1}, {
+            ignoreCreeps: true,
+            swampCost: 2,
+            plainCost: 2,
+            roomCallback(name){
+              const room = Game.rooms[name];
+              if (!room) return;
+              let costs = new PathFinder.CostMatrix;
+
+              var roads = room.find(FIND_STRUCTURES, {
+                filter: (i) => {
+                  return i.structureType === STRUCTURE_ROAD
+                }
+              })
+              for (const sInd in roads){
+                const struct = roads[sInd];
+                costs.set(struct.pos.x, struct.pos.y, 1);
+              }
+
+              // don't step in leafs
+              for (const leaf of room.leafs){
+                for (const step of leaf.noWalk){
+                  costs.set(step.x, step.y, 50);
+                }
+              }
+
+              for (const source of room.sources){
+                const spot = source.miningSpot;
+                costs.set(spot.x, spot.y, 255);
+              }
+
+              return costs;
+            }
+          }).path
+        }
+        const startcpu = Game.cpu.getUsed();
+        this._pathToStorage = [];
+        for (const p of this.memory.pathToStorage){
+          this._pathToStorage.push(new RoomPosition(p.x, p.y, p.roomName));
+        }
+        console.log('Used (to):', Game.cpu.getUsed() - startcpu)
+      }
+    }
+    return this._pathToStorage;
+  }
+})
+
 Object.defineProperty(Source.prototype, 'miner', {
   get (){
     if (!this._miner){
