@@ -98,9 +98,9 @@ module.exports.loop = function () {
           tower.repair(closestDamagedStructure);
         }
 
-        var closestHostile = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
-        if(closestHostile) {
-          tower.attack(closestHostile);
+        const targets = tower.pos.findInRange(FIND_HOSTILE_CREEPS, 15)
+        if (targets.length > 0){
+          tower.attack(targets[0])
         }
       }
     }
