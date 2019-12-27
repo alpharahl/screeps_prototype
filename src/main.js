@@ -74,9 +74,44 @@ module.exports.loop = function () {
         return i.structureType == STRUCTURE_TOWER
       }
     })
+    var hostileCreeps = []
     for (const tower of towers){
+      if (hostileCreeps.length === 0){
+        hostileCreeps = tower.pos.findInRange(FIND_HOSTILE_CREEPS, 10, {
 
+        })
+        var creepsNotOnFull = room.find(FIND_HOSTILE_CREEPS, {
+          filter: (i) => {
+            return i.hits < i.hitsMax
+          }
+        })
+        hostileCreeps = hostileCreeps.concat(creepsNotOnFull)
+      }
+    }
+    var damageDone = 0;
+    for (const tower of towers){
       if(tower) {
+        if (room.find(FIND_HOSTILE_CREEPS).length > 0){
+          if (hostileCreeps.length > 0){
+            if (tower.attack(hostileCreeps[0]) === 0){
+              var range = tower.pos.getRangeTo(hostileCreeps[0]);
+              var expectedHits = 600
+              if (range > 5){
+                expectedHits = expectedHits - (range * 40)
+              }
+              if (range >= 20){
+                expectedHits = 150
+              }
+              damageDone = damageDone + expectedHits;
+              if (damageDone >= hostileCreeps[0].hits){
+                hostileCreeps.shift();
+                damageDone = 0;
+              }
+            }
+
+          }
+          continue;
+        }
         var closestDamagedStructure = tower.pos.findClosestByRange(FIND_STRUCTURES, {
           filter: (i) => {
             return i.hits < i.hitsMax &&
@@ -85,7 +120,7 @@ module.exports.loop = function () {
           }
 
         });
-        if (!closestDamagedStructure){
+        if (!closestDamagedStructure && (room.storage && room.storage.energy > 100000)){
           closestDamagedStructure = tower.pos.findClosestByRange(FIND_STRUCTURES, {
             filter: (i) => {
               return i.hits < WALL_HEALTH &&
@@ -98,10 +133,6 @@ module.exports.loop = function () {
           tower.repair(closestDamagedStructure);
         }
 
-        const targets = tower.pos.findInRange(FIND_HOSTILE_CREEPS, 15)
-        if (targets.length > 0){
-          tower.attack(targets[0])
-        }
       }
     }
   }

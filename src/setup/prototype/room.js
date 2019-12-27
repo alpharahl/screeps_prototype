@@ -127,6 +127,22 @@ Object.defineProperty(Room.prototype, 'haulers', {
   configurable: true
 })
 
+Object.defineProperty(Room.prototype, 'archers', {
+  get: function(){
+    if (!this._archers){
+      this._archers = [];
+      for (const creep of this.creeps){
+        if (creep.type === 'archer'){
+          this._archers.push(creep.id)
+        }
+      }
+    }
+    return this._archers;
+  },
+  enumerable: false,
+  configurable: true
+})
+
 Object.defineProperty(Room.prototype, 'queenAvoid', {
   get(){
     if (!this._queenAvoid) {

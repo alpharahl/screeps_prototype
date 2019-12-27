@@ -48,7 +48,7 @@ StructureSpawn.prototype.spawnUpgrader = function(){
     ideal = [];
     var storedCalc = this.room.storage.store[RESOURCE_ENERGY]/UPGRADER_SCALE;
     if (this.room.controller.level === 8 && storedCalc > 5){
-      storedCalc = 5;
+      storedCalc = 1;
     }
     for (var n = 0; n < storedCalc; n++){
       ideal = ideal.concat([MOVE, CARRY, WORK, WORK, WORK]);
@@ -95,6 +95,26 @@ StructureSpawn.prototype.spawnBuilder = function(){
   if (this.spawnCreep(body, name, creepOpts) === OK){
     this.room._bestSpawner = false;
     //console.log("Spawning Builder for", this.room.name)
+  }
+}
+
+StructureSpawn.prototype.spawnArcher = function(roomName = this.room.name){
+  var room = Game.rooms[roomName];
+  var name = this.room.nextCreepName;
+  var body = [MOVE, MOVE, MOVE, MOVE, RANGED_ATTACK, RANGED_ATTACK];
+  body = this.finalizeBody(body)
+  var creepOpts = {
+    memory: {
+      type: 'archer',
+      targetRoom: roomName
+    }
+  }
+  if (this.spawnCreep(body, name, creepOpts) === OK){
+    room._bestSpawner = false;
+    if (room.name !== this.room.name){
+      this.room._bestSpawner = false;
+    }
+    //console.log("Spawning miner for", sourceId, 'from', this.name)
   }
 }
 

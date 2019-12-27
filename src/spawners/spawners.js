@@ -5,6 +5,7 @@ var haulerSpawner = require('spawners_hauler');
 var queenSpawner = require('spawners_queen')
 var scoutSpawner = require('spawners_scout');
 var reserverSpawner = require('spawners_reserver');
+var archerSpawner = require('spawners_archer');
 
 var spawners = {
   run(){
@@ -44,6 +45,7 @@ var spawners = {
   },
 
   spawnRemote(room){
+    archerSpawner.remoteRun(room);
     minerSpawner.remoteRun(room);
     haulerSpawner.remoteRun(room);
   }

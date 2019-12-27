@@ -1,6 +1,9 @@
 module.exports = {
   run(room){
     for (const roomName of room.reserveRooms){
+      if (roomName === 'E37N11' || roomName === 'E37N12' || roomName === 'E39N11'){
+        continue;
+      }
       if (!room.memory.reservers){
         room.memory.reservers = {}
       }

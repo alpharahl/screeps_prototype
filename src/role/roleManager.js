@@ -8,6 +8,7 @@ var harasser = require('role_harasser');
 var scout = require('role_scout')
 var reserver = require('role_reserver');
 var remoteHauler = require('role_remoteHauler');
+var archer = require('role_archer');
 
 getMethod = function(string, creep)
 {
